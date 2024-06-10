@@ -10,35 +10,41 @@
             <p class="movie-title">{{ ticket.movieTitle }}</p>
           </div>
           <div class="info">
-            <table>
-              <tr>
-                <th>HALL</th>
-                <th>ROW</th>
-                <th>SEAT</th>
-              </tr>
-              <tr>
-                <td class="bigger">{{ ticket.hall }}</td>
-                <td class="bigger">{{ ticket.row }}</td>
-                <td class="bigger">{{ ticket.seat }}</td>
-              </tr>
-            </table>
-            <table>
-              <tr>
-                <th>PRICE</th>
-                <th>DATE</th>
-                <th>TIME</th>
-              </tr>
-              <tr>
-                <td>RM {{ ticket.price }}</td>
-                <td>{{ ticket.date }}</td>
-                <td>{{ ticket.time }}</td>
-              </tr>
-            </table>
+            <div class="ticket-info">
+              <div class="info-row">
+                <span class="label">BRANCH:</span>
+                <span class="value">{{ ticket.branch }}</span>
+              </div>
+              <div class="info-row">
+                <span class="label">HALL:</span>
+                <span class="value">{{ ticket.hall }}</span>
+              </div>
+              <div class="info-row">
+                <span class="label">ROW:</span>
+                <span class="value">{{ ticket.row }}</span>
+              </div>
+              <div class="info-row">
+                <span class="label">SEAT:</span>
+                <span class="value">{{ ticket.seat }}</span>
+              </div>
+              <div class="info-row">
+                <span class="label">PRICE:</span>
+                <span class="value">RM {{ ticket.price }}</span>
+              </div>
+              <div class="info-row">
+                <span class="label">DATE:</span>
+                <span class="value">{{ ticket.date }}</span>
+              </div>
+              <div class="info-row">
+                <span class="label">TIME:</span>
+                <span class="value">{{ ticket.time }}</span>
+              </div>
+            </div>
           </div>
-          <div class="holes-lower"></div>
           <div class="qr-code">
             <canvas :ref="'qrcodeCanvas' + index"></canvas>
           </div>
+          <div class="holes-lower"></div>
         </div>
       </div>
       <div class="buttons">
@@ -48,6 +54,7 @@
     </main>
   </div>
 </template>
+
 
 <script>
 import HeaderPage from '@/components/HeaderPage.vue';
@@ -80,9 +87,9 @@ export default {
   methods: {
     generateQRCodes() {
       this.tickets.forEach((ticket, index) => {
-        const randomData = Math.random().toString(36).substring(7); // Generating random string
+        const qrData = `${ticket.movieTitle}-${ticket.branch}-${ticket.hall}-${ticket.row}-${ticket.seat}-${ticket.date}-${ticket.time}`; // Unique data for QR code
         const canvas = this.$refs['qrcodeCanvas' + index][0]; // Accessing the canvas element
-        QRCode.toCanvas(canvas, randomData, function (error) {
+        QRCode.toCanvas(canvas, qrData, function (error) {
           if (error) console.error(error);
           console.log('QR code generated successfully!');
         });
@@ -98,22 +105,15 @@ export default {
           pdf.addPage();
         }
         pdf.setFontSize(20);
-        console.log(`Text: 'ABCinemas PRESENTS' at (10, 20)`);
         pdf.text('ABCinemas PRESENTS', 10, 20);
-        console.log(`Text: '${ticket.movieTitle}' at (10, 30)`);
         pdf.text(ticket.movieTitle, 10, 30);
         pdf.setFontSize(12);
-        console.log(`Text: 'HALL: ${ticket.hall}' at (10, 50)`);
+        pdf.text(`BRANCH: ${ticket.branch}`, 10, 40);
         pdf.text(`HALL: ${ticket.hall}`, 10, 50);
-        console.log(`Text: 'ROW: ${ticket.row}' at (10, 60)`);
         pdf.text(`ROW: ${ticket.row}`, 10, 60);
-        console.log(`Text: 'SEAT: ${ticket.seat}' at (10, 70)`);
         pdf.text(`SEAT: ${ticket.seat}`, 10, 70);
-        console.log(`Text: 'PRICE: RM ${ticket.price}' at (10, 80)`);
         pdf.text(`PRICE: RM ${ticket.price}`, 10, 80);
-        console.log(`Text: 'DATE: ${ticket.date}' at (10, 90)`);
         pdf.text(`DATE: ${ticket.date}`, 10, 90);
-        console.log(`Text: 'TIME: ${ticket.time}' at (10, 100)`);
         pdf.text(`TIME: ${ticket.time}`, 10, 100);
 
         const canvas = this.$refs['qrcodeCanvas' + index][0];
@@ -125,6 +125,7 @@ export default {
   }
 };
 </script>
+
 
 <style src="../assets/css/e-ticket.css"></style>
 
@@ -168,5 +169,64 @@ button:hover {
 
 button + button {
   margin-left: 10px;
+}
+
+.holes-top,
+.holes-lower {
+  width: 100%;
+  height: 10px;
+  background: repeating-linear-gradient(
+    -45deg,
+    #fff,
+    #fff 3px,
+    #ddd 3px,
+    #ddd 6px
+  );
+}
+
+.title {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.cinema {
+  font-size: 14px;
+  color: #666;
+}
+
+.movie-title {
+  font-size: 18px;
+  font-weight: bold;
+  color: #333;
+}
+
+.info {
+  margin-bottom: 20px;
+}
+
+.ticket-info {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.info-row {
+  display: flex;
+  justify-content: space-between;
+}
+
+.label {
+  font-weight: bold;
+}
+
+.value {
+  font-size: 14px;
+}
+
+.qr-code {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
 }
 </style>

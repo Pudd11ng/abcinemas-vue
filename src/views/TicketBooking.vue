@@ -13,75 +13,80 @@
                 <div id="movie-select-div">
                   <h2>Movie Selection</h2>
                   <div class="movie-selection">
-                    <div
-                      class="movie-card"
-                      v-for="movie in movies"
-                      :key="movie"
-                      :class="{ selected: movie === selectedMovie }"
-                      @click="selectMovie(movie)"
-                    >
+                    <div class="movie-card" v-for="movie in movies" :key="movie"
+                      :class="{ selected: movie === selectedMovie }" @click="selectMovie(movie)">
                       <h3>{{ movie }}</h3>
                     </div>
                   </div>
-                  <input type="button" name="next-step" class="next-step" value="Continue" :disabled="!selectedMovie" @click="proceedToDateSelection" />
+                  <input type="button" name="next-step" class="next-step" value="Continue" :disabled="!selectedMovie"
+                    @click="proceedToBranchSelection" />
                 </div>
               </fieldset>
               <fieldset v-if="step === 2">
+                <div id="branch-select-div">
+                  <h2>Branch Selection</h2>
+                  <div class="branch-selection">
+                    <div class="branch-card" v-for="branch in branches" :key="branch"
+                      :class="{ selected: branch === selectedBranch }" @click="selectBranch(branch)">
+                      <h3>{{ branch }}</h3>
+                    </div>
+                  </div>
+                  <input type="button" name="next-step" class="next-step" value="Continue" :disabled="!selectedBranch"
+                    @click="proceedToDateSelection" />
+                </div>
+              </fieldset>
+              <fieldset v-if="step === 3">
                 <div id="date-select-div">
                   <h2>Show Time Selection</h2>
                   <div>
                     <p>Selected Movie: <strong>{{ selectedMovie }}</strong></p>
+                    <p>Selected Branch: <strong>{{ selectedBranch }}</strong></p>
                     <input type="date" v-model="selectedDate" :min="minDate" :max="maxDate" @change="fetchShowTimes" />
                   </div>
-                  <ul class="time-ul" v-if="showTimes.length">
-                    <li class="time-li" v-for="hall in halls" :key="hall.id">
-                      <div class="halls">{{ hall.name }}</div>
-                      <div class="time-btn">
-                        <button
-                          class="hall-time"
-                          type="button"
-                          v-for="time in hall.times"
-                          :key="time"
-                          :class="{ selected: selectedTime === time && selectedHall === hall.name }"
-                          @click="selectTime(hall, time)"
-                        >
-                          {{ time }}
-                        </button>
+                  <div class="time-table" v-if="showTimes.length">
+                    <div v-for="(showTimeRow, rowIndex) in showTimes" :key="rowIndex" class="time-row">
+                      <div v-for="(time, hallIndex) in showTimeRow" :key="hallIndex" class="time-cell">
+                        <div class="hall-number">Hall {{ time.hall }}</div>
+                        <div class="show-time"
+                          :class="{ selected: selectedHall === time.hall && selectedTime === time.time }"
+                          @click="selectTime(time.hall, time.time)">
+                          {{ time.time }}
+                        </div>
                       </div>
-                    </li>
-                  </ul>
+                    </div>
+                  </div>
                 </div>
-                <input id="date-next-btn" type="button" name="next-step" class="next-step" value="Continue Booking" :disabled="isNextDisabled" @click="proceedToTicketSelection" />
+                <input id="date-next-btn" type="button" name="next-step" class="next-step" value="Continue Booking"
+                  :disabled="isNextDisabled" @click="proceedToTicketSelection" />
               </fieldset>
-              <fieldset v-if="step === 3">
+              <fieldset v-if="step === 4">
                 <div id="ticket-select-div">
                   <h2>Ticket Selection</h2>
                   <div v-for="(ticketType, index) in ticketTypes" :key="index" class="ticket-type-selection">
                     <label :for="ticketType.name">{{ ticketType.label }} (RM{{ ticketType.price }}):</label>
                     <select :id="ticketType.name" v-model.number="ticketType.quantity" @change="updateTotalPrice">
-                      <option v-for="n in 7" :key="n" :value="n-1">{{ n-1 }}</option>
+                      <option v-for="n in 7" :key="n" :value="n - 1">{{ n - 1 }}</option>
                     </select>
                   </div>
                   <div>Total Price: RM {{ totalPrice }}</div>
-                  <input type="button" name="next-step" class="next-step" value="Continue to Seat Selection" :disabled="totalTickets === 0" @click="proceedToSeatSelection" />
+                  <input type="button" name="next-step" class="next-step" value="Continue to Seat Selection"
+                    :disabled="totalTickets === 0" @click="proceedToSeatSelection" />
                 </div>
-              </fieldset>
-              <fieldset v-if="step === 4">
-                <div id="seat-sel-frame" :style="frameStyle">
-                  <SeatSelection 
-                    @update-total="updateTotal" 
-                    @select-seat="selectSeat"
-                    :selected-date="selectedDate"
-                    :selected-time="selectedTime"
-                    :hall="selectedHall"
-                    :max-seats="totalTickets"
-                  />
-                </div>
-                <br>
-                <input type="button" name="next-step" class="next-step" value="Proceed to Payment" @click="validateSeatSelection" />
-                <input type="button" name="previous-step" class="previous-step" value="Back" @click="goBackToTicketSelection" />
               </fieldset>
               <fieldset v-if="step === 5">
+                <div id="seat-sel-frame" :style="frameStyle">
+                  <SeatSelection @update-total="updateTotal" @select-seat="selectSeat" :selected-branch="selectedBranch"
+                    :selected-date="selectedDate" :selected-time="selectedTime" :hall="selectedHall"
+                    :max-seats="totalTickets" :selected-movie="selectedMovie" :ticketTypes="ticketTypes" />
+
+                </div>
+                <br>
+                <input type="button" name="next-step" class="next-step" value="Proceed to Payment"
+                  @click="validateSeatSelection" />
+                <input type="button" name="previous-step" class="previous-step" value="Back"
+                  @click="goBackToTicketSelection" />
+              </fieldset>
+              <fieldset v-if="step === 6">
                 <!-- Payment Page -->
                 <div id="payment_div">
                   <div class="payment-row">
@@ -126,7 +131,8 @@
                             </div>
                             <div class="col-50">
                               <label for="ccnum">Credit card number</label>
-                              <input type="text" id="ccnum" name="cardnumber" placeholder="xxxx-xxxx-xxxx-xxxx" required />
+                              <input type="text" id="ccnum" name="cardnumber" placeholder="xxxx-xxxx-xxxx-xxxx"
+                                required />
                             </div>
                           </div>
                           <div class="payment-row">
@@ -151,14 +157,16 @@
                             <button type="button" @click="confirmCardPayment">Confirm Payment</button>
                           </div>
                         </div>
-                        <div v-else-if="selectedPayment === 'e-wallet' || selectedPayment === 'fpx'" class="proceed-payment">
+                        <div v-else-if="selectedPayment === 'e-wallet' || selectedPayment === 'fpx'"
+                          class="proceed-payment">
                           <button type="button" @click="proceedForPayment">Proceed for Payment</button>
                         </div>
                       </div>
                     </div>
                   </div>
                 </div>
-                <input type="button" name="previous-step" class="cancel-pay-btn" value="Cancel Payment" @click="cancelPayment" />
+                <input type="button" name="previous-step" class="cancel-pay-btn" value="Cancel Payment"
+                  @click="cancelPayment" />
               </fieldset>
             </form>
           </div>
@@ -180,11 +188,10 @@ export default {
     return {
       step: 1, // To manage the form steps
       selectedMovie: '',
+      selectedBranch: '',
       selectedDate: '',
       selectedTime: '',
       selectedHall: '',
-      selectedRow: '',
-      selectedSeat: '',
       totalPrice: 0,
       selectedPayment: '', // Selected payment method
       movies: [
@@ -209,12 +216,14 @@ export default {
         'Haraa',
         'Munjya'
       ],
+      branches: ['UTM', 'Muar', 'Yong Peng', 'Kota Tinggi', 'Cameron Highlands'],
       halls: [
-        { id: 1, name: 'Hall 1', times: this.generateShowTimes() },
-        { id: 2, name: 'Hall 2', times: this.generateShowTimes() },
-        { id: 3, name: 'Hall 3', times: this.generateShowTimes() },
-        { id: 4, name: 'Hall 4', times: this.generateShowTimes() },
-        { id: 5, name: 'Hall 5', times: this.generateShowTimes() }
+        { id: 1, name: '1', times: [] },
+        { id: 2, name: '2', times: [] },
+        { id: 3, name: '3', times: [] },
+        { id: 4, name: '4', times: [] },
+        { id: 5, name: '5', times: [] },
+        { id: 6, name: '6', times: [] }
       ],
       showTimes: [],
       ticketTypes: [
@@ -224,7 +233,8 @@ export default {
         { name: 'disabilities', label: 'Disabilities', price: 11, quantity: 0 },
         { name: 'senior', label: 'Senior Citizen', price: 11, quantity: 0 }
       ],
-      selectedSeats: []
+      selectedSeats: [],
+      unavailableTimes: {} // To track unavailable times for each hall
     };
   },
   computed: {
@@ -262,37 +272,75 @@ export default {
         '18:00', '18:30', '19:00', '19:30', '20:00', '20:30', '21:00', '21:30',
         '22:00', '22:30', '23:00', '23:30'
       ];
-      const shuffledTimes = allTimes.sort(() => 0.5 - Math.random());
-      return shuffledTimes.slice(0, 5).sort((a, b) => {
-        const timeA = new Date(`1970/01/01 ${a}`);
-        const timeB = new Date(`1970/01/01 ${b}`);
-        return timeA - timeB;
+
+      // Randomize the order of showtimes
+      const shuffledTimes = allTimes.sort(() => Math.random() - 0.5).slice(0, 6);
+
+      // Sort the randomized showtimes in ascending order
+      const sortedTimes = shuffledTimes.sort((a, b) => {
+        const [hoursA, minutesA] = a.split(':');
+        const [hoursB, minutesB] = b.split(':');
+        return new Date(0, 0, 0, hoursA, minutesA) - new Date(0, 0, 0, hoursB, minutesB);
       });
+
+      return sortedTimes;
     },
+
     fetchShowTimes() {
       if (!this.selectedDate) return;
-      this.halls.forEach(hall => {
-        hall.times = this.generateShowTimes();
-      });
-      this.showTimes = this.halls; // Ensure showTimes are updated
+      const dateStr = this.selectedDate;
+      const times = this.generateShowTimes(); // Get 6 times
+
+      this.showTimes = [];
+      const row = [];
+      for (let i = 0; i < 6; i++) {
+        const hallIndex = i % this.halls.length;
+        row.push({ hall: this.halls[hallIndex].name, time: times[i] });
+        if (row.length === 3) {
+          this.showTimes.push(row.slice());
+          row.length = 0;
+        }
+      }
+      if (row.length) {
+        this.showTimes.push(row);
+      }
     },
+
     selectMovie(movie) {
       this.selectedMovie = movie;
     },
+    selectBranch(branch) {
+      this.selectedBranch = branch;
+    },
     selectTime(hall, time) {
-      this.selectedHall = hall.name;
+      this.selectedHall = hall;
       this.selectedTime = time;
       this.updateTicketPrices();
+      // Block this hall for this time and the next 2 hours
+      const dateStr = this.selectedDate;
+      const hallName = hall;
+      if (!this.unavailableTimes[hallName]) {
+        this.unavailableTimes[hallName] = {};
+      }
+      if (!this.unavailableTimes[hallName][dateStr]) {
+        this.unavailableTimes[hallName][dateStr] = [];
+      }
+      const timeIndex = this.generateShowTimes().indexOf(time);
+      const blockTimes = this.generateShowTimes().slice(timeIndex, timeIndex + 3);
+      this.unavailableTimes[hallName][dateStr].push(...blockTimes);
     },
-    proceedToDateSelection() {
+    proceedToBranchSelection() {
       this.step = 2;
     },
-    proceedToTicketSelection() {
+    proceedToDateSelection() {
       this.step = 3;
+    },
+    proceedToTicketSelection() {
+      this.step = 4;
     },
     proceedToSeatSelection() {
       if (this.totalTickets > 0 && this.totalTickets <= 6) {
-        this.step = 4;
+        this.step = 5;
       } else {
         alert('You can select at most 6 tickets.');
       }
@@ -305,10 +353,10 @@ export default {
       }
     },
     proceedToPayment() {
-      this.step = 5;
+      this.step = 6;
     },
     goBackToTicketSelection() {
-      this.step = 3;
+      this.step = 4;
     },
     cancelPayment() {
       this.$router.push('/');
@@ -330,12 +378,12 @@ export default {
           }
         } else if (isAfter6pm) { // After 6pm
           ticket.price = ticket.name === 'adult' ? 22 :
-                         ticket.name === 'child' ? 16 :
-                         ticket.name === 'student' ? 18 : 16;
+            ticket.name === 'child' ? 16 :
+              ticket.name === 'student' ? 18 : 16;
         } else { // Regular pricing
           ticket.price = ticket.name === 'adult' ? 16 :
-                         ticket.name === 'child' ? 11 :
-                         ticket.name === 'student' ? 14 : 11;
+            ticket.name === 'child' ? 11 :
+              ticket.name === 'student' ? 14 : 11;
         }
       });
 
@@ -352,34 +400,33 @@ export default {
       }
     },
     proceedForPayment() {
-    alert('Proceeding for payment via ' + this.selectedPayment);
-    this.ticketBooked = true;
-    const serializedTickets = JSON.stringify(this.generateETicketParams());
-    this.$router.push({ name: 'ETicket', query: { tickets: serializedTickets } });
-  },
-  confirmCardPayment() {
-    alert('Payment confirmed with Credit Card');
-    this.ticketBooked = true;
-    const serializedTickets = JSON.stringify(this.generateETicketParams());
-    this.$router.push({ name: 'ETicket', query: { tickets: serializedTickets } });
-  },
-  generateETicketParams() {
-    const tickets = [];
-    this.selectedSeats.forEach(seat => {
-      tickets.push({
-        movieTitle: this.selectedMovie,
-        posterUrl: 'https://s3-us-west-2.amazonaws.com/s.cdpn.io/25240/only-god-forgives.jpg',
-        hall: this.selectedHall,
-        row: seat.row,
-        seat: seat.seat,
-        price: this.totalPrice,
-        date: this.selectedDate,
-        time: this.selectedTime
+      alert('Proceeding for payment via ' + this.selectedPayment);
+      this.ticketBooked = true;
+      const serializedTickets = JSON.stringify(this.generateETicketParams());
+      this.$router.push({ name: 'ETicket', query: { tickets: serializedTickets } });
+    },
+    confirmCardPayment() {
+      alert('Payment confirmed with Credit Card');
+      this.ticketBooked = true;
+      const serializedTickets = JSON.stringify(this.generateETicketParams());
+      this.$router.push({ name: 'ETicket', query: { tickets: serializedTickets } });
+    },
+    generateETicketParams() {
+      const tickets = [];
+      this.selectedSeats.forEach(seat => {
+        tickets.push({
+          movieTitle: this.selectedMovie,
+          branch: this.selectedBranch,
+          hall: this.selectedHall,
+          row: seat.row,
+          seat: seat.seat,
+          price: this.totalPrice,
+          date: this.selectedDate,
+          time: this.selectedTime
+        });
       });
-    });
-    return tickets;
-  }
-
+      return tickets;
+    }
   },
   created() {
     this.fetchShowTimes();
@@ -401,7 +448,8 @@ export default {
 }
 
 .movie-card {
-  flex: 1 0 21%; /* Adjust the width of each movie card to fit multiple cards in a row */
+  flex: 1 0 21%;
+  /* Adjust the width of each movie card to fit multiple cards in a row */
   box-sizing: border-box;
   margin: 10px;
   padding: 10px;
@@ -422,71 +470,100 @@ export default {
   background-color: #f0f0f0;
 }
 
-.time-ul {
-  display: grid;
-  grid-template-columns: repeat(5, 1fr); /* Create a grid with 5 columns */
+.branch-selection {
+  display: flex;
+  flex-wrap: wrap;
   gap: 10px;
+  padding: 10px 0;
 }
 
-.time-li {
-  list-style: none;
-  padding: 0;
-  margin: 10px 0;
-}
-
-.halls {
-  grid-column: span 5; /* Make the hall name span across all columns */
-  text-align: center;
-  margin-bottom: 10px;
-  font-weight: bold;
-}
-
-.time-btn {
-  display: grid;
-  grid-template-columns: repeat(5, 1fr); /* Create a grid with 5 columns */
-  gap: 10px;
-}
-
-.hall-time {
-  background-color: white;
+.branch-card {
+  flex: 1 0 21%;
+  /* Adjust the width of each branch card to fit multiple cards in a row */
+  box-sizing: border-box;
+  margin: 10px;
+  padding: 10px;
   border: 1px solid #ddd;
   border-radius: 5px;
-  padding: 10px;
-  cursor: pointer;
-  color: black; /* Default color for unselected times */
-  transition: background-color 0.2s, color 0.2s;
   text-align: center;
+  cursor: pointer;
+  transition: transform 0.2s, background-color 0.2s;
 }
 
-.hall-time.selected {
+.branch-card.selected {
   background-color: #df0e62;
-  color: white; /* Color for the selected time */
+  color: white;
 }
 
-.hall-time:hover {
+.branch-card:hover {
+  transform: scale(1.05);
   background-color: #f0f0f0;
 }
 
+.time-table {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 10px 0;
+}
+
+.time-row {
+  display: flex;
+  justify-content: space-around;
+}
+
+.time-cell {
+  text-align: center;
+}
+
+.hall-number {
+  font-weight: bold;
+}
+
+.show-time {
+  cursor: pointer;
+  padding: 5px 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  transition: background-color 0.2s, color 0.2s;
+}
+
+.show-time:hover {
+  background-color: #f0f0f0;
+}
+
+.show-time.selected {
+  background-color: #df0e62;
+  color: white;
+}
+
 .booking-details ul {
-  list-style: none; /* Remove bullet points */
-  padding: 0; /* Remove padding */
-  margin: 0; /* Remove margin */
+  list-style: none;
+  /* Remove bullet points */
+  padding: 0;
+  /* Remove padding */
+  margin: 0;
+  /* Remove margin */
 }
 
 .booking-details .book-left li,
 .booking-details .book-right li {
-  text-align: left; /* Align text to the left */
-  padding: 5px 0; /* Add some padding for better spacing */
+  text-align: left;
+  /* Align text to the left */
+  padding: 5px 0;
+  /* Add some padding for better spacing */
 }
 
 .booking-details .book-left {
   float: left;
-  width: 50%; /* Adjust width as needed */
+  width: 50%;
+  /* Adjust width as needed */
 }
 
 .booking-details .book-right {
   float: right;
-  width: 50%; /* Adjust width as needed */
+  width: 50%;
+  /* Adjust width as needed */
 }
 
 .payment-methods {
@@ -503,7 +580,8 @@ export default {
   padding: 10px;
   border: 1px solid #ccc;
   border-radius: 5px;
-  width: 30%; /* Ensure methods are evenly spaced */
+  width: 30%;
+  /* Ensure methods are evenly spaced */
 }
 
 .method:hover {
@@ -518,15 +596,18 @@ export default {
 }
 
 .card-icon {
-  font-size: 3em; /* Make card icon bigger */
+  font-size: 3em;
+  /* Make card icon bigger */
 }
 
 .bank-icon {
-  font-size: 3em; /* Make bank icon bigger */
+  font-size: 3em;
+  /* Make bank icon bigger */
 }
 
 .e-wallet-icon {
-  width: 30px; /* Adjust e-wallet icon size */
+  width: 30px;
+  /* Adjust e-wallet icon size */
 }
 
 .radio-input {
@@ -562,17 +643,21 @@ export default {
 }
 
 .carousel-cell {
-  border: none; /* Ensure there is no border */
-  background-color: transparent; /* Remove any background color */
+  border: none;
+  /* Ensure there is no border */
+  background-color: transparent;
+  /* Remove any background color */
   cursor: pointer;
 }
 
 .carousel-cell.active {
-  background-color: #df0e62; /* Add your desired active background color */
+  background-color: #df0e62;
+  /* Add your desired active background color */
 }
 
 .carousel-cell.previous-active {
-  background-color: transparent; /* Ensure previously active cells are reset */
+  background-color: transparent;
+  /* Ensure previously active cells are reset */
 }
 
 /* Removing default styles that might be adding borders or background */
@@ -581,7 +666,8 @@ export default {
   background-color: transparent !important;
 }
 
-.date-numeric, .date-day {
+.date-numeric,
+.date-day {
   border: none !important;
   background-color: transparent !important;
 }
@@ -601,23 +687,27 @@ export default {
 
 .ticket-type-selection {
   display: flex;
-  align-items: center; /* Align items to the center */
-  justify-content: space-between; /* Add space between items */
+  align-items: center;
+  /* Align items to the center */
+  justify-content: space-between;
+  /* Add space between items */
   margin-bottom: 15px;
 }
 
 .ticket-type-selection label {
   flex: 1;
   margin-right: 10px;
-  text-align: right; /* Align label text to the right */
+  text-align: right;
+  /* Align label text to the right */
 }
 
 .ticket-type-selection select {
   flex: 1;
   padding: 5px;
   font-size: 1em;
-  width: 60px; /* Adjust the width to make the choice box larger */
-  text-align: center; /* Center the number in the select box */
+  width: 60px;
+  /* Adjust the width to make the choice box larger */
+  text-align: center;
+  /* Center the number in the select box */
 }
-
 </style>

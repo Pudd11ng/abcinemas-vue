@@ -11,18 +11,28 @@
             <div class="booking-details">
               <div class="details">
                 <ul class="book-left">
+                  <li>Branch:</li>
                   <li>Movie:</li>
                   <li>Time:</li>
                   <li>Tickets:</li>
+                  <li>Ticket Types:</li>
                   <li>Total:</li>
                   <li>Selected Seats:</li>
                   <li id="selected-seats" class="scrollbar scrollbar1"></li>
                 </ul>
                 <ul class="book-right">
+                  <li>{{ selectedBranch }}</li>
                   <li>{{ selectedMovie }}</li>
                   <li>{{ selectedDate }}, {{ selectedTime }}</li>
-                  <li><span id="counter">0</span></li>
-                  <li><b><i>RM</i><span id="total">0</span></b></li>
+                  <li>{{ totalTickets }}</li>
+                  <li>
+                    <ul class="ticket-types">
+                      <li v-for="(ticket, index) in selectedTicketTypes" :key="index">
+                        {{ abbreviate(ticket.label) }}: {{ ticket.quantity }}
+                      </li>
+                    </ul>
+                  </li>
+                  <li><b><i>RM</i>{{ totalPrice }}</b></li>
                 </ul>
               </div>
               <div class="clear"></div>
@@ -48,22 +58,73 @@ import '@/assets/js/jquery.seat-charts.js'; // Import the local script
 export default {
   name: 'SeatSelection',
   props: {
+    selectedBranch: String,
     selectedDate: String,
     selectedTime: String,
     hall: String,
     selectedMovie: String,
-    maxSeats: Number
+    maxSeats: Number,
+    ticketTypes: {
+      type: Array,
+      default: () => [] // Default to an empty array
+    }
   },
   data() {
     return {
       selectedSeats: []
     };
   },
+  computed: {
+    totalTickets() {
+      return this.ticketTypes.reduce((acc, ticket) => acc + ticket.quantity, 0);
+    },
+    totalPrice() {
+      return this.ticketTypes.reduce((acc, ticket) => acc + (ticket.price * ticket.quantity), 0);
+    },
+    selectedTicketTypes() {
+      return this.ticketTypes.filter(ticket => ticket.quantity > 0);
+    }
+  },
+  methods: {
+    abbreviate(label) {
+      const abbreviations = {
+        'Adult': 'A',
+        'Child': 'C',
+        'Student': 'S',
+        'Disabilities': 'D',
+        'Senior Citizen': 'SC'
+      };
+      return abbreviations[label] || label;
+    },
+    handleSeatSelection(seat, action) {
+      const ticketType = this.ticketTypes.find(ticket => ticket.quantity > 0);
+      if (ticketType) {
+        if (action === 'select') {
+          this.selectedSeats.push(seat);
+          ticketType.quantity -= 1;
+        } else if (action === 'deselect') {
+          this.selectedSeats = this.selectedSeats.filter(s => s !== seat);
+          ticketType.quantity += 1;
+        }
+        this.updateTotal();
+      }
+    },
+    updateTotal() {
+      this.$emit('update-total', this.totalPrice);
+    },
+    calculatePrice() {
+      if (!this.ticketTypes || this.ticketTypes.length === 0) {
+        return 0;
+      }
+
+      return this.ticketTypes.reduce((acc, ticket) => acc + (ticket.price * ticket.quantity), 0);
+    }
+  },
   mounted() {
-    const price = 14; // price per ticket
     const self = this; // Reference to Vue component
     const seatMaps = {
       'Hall 1': [
+        'aaaaa_aaaa',
         'aaaaa_aaaa',
         'aaaaa_aaaa',
         'aaaaa_aaaa',
@@ -72,9 +133,12 @@ export default {
       'Hall 2': [
         'aaaaa_aaaa',
         'aaaaa_aaaa',
+        'aaaaa_aaaa',
         'aaaaa_aaaa'
       ],
       'Hall 3': [
+        'aaaaa_aaaa',
+        'aaaaa_aaaa',
         'aaaaa_aaaa',
         'aaaaa_aaaa',
         'aaaaa_aaaa',
@@ -85,9 +149,19 @@ export default {
         'aaaaa_aaaa',
         'aaaaa_aaaa',
         'aaaaa_aaaa',
+        'aaaaa_aaaa',
+        'aaaaa_aaaa',
         'aaaaa_aaaa'
       ],
       'Hall 5': [
+        'aaaaa_aaaa',
+        'aaaaa_aaaa',
+        'aaaaa_aaaa',
+        'aaaaa_aaaa',
+        'aaaaa_aaaa'
+      ],
+      'Hall 6': [
+        'aaaaa_aaaa',
         'aaaaa_aaaa',
         'aaaaa_aaaa',
         'aaaaa_aaaa',
@@ -134,9 +208,8 @@ export default {
                 .appendTo($cart);
 
               $counter.text(self.selectedSeats.length);
-              const newTotal = recalculateTotal(sc) + price;
-              $total.text(newTotal);
-              self.$emit('update-total', newTotal); // Emit the update-total event with the new total
+              $total.text(self.totalPrice);
+              self.$emit('update-total', self.totalPrice); // Emit the update-total event with the new total
               self.$emit('select-seat', { row: this.settings.row + 1, seat: this.settings.label }); // Emit the selected seat
 
               return 'selected';
@@ -146,11 +219,10 @@ export default {
             }
           } else if (this.status() === 'selected') {
             self.selectedSeats = self.selectedSeats.filter(seat => !(seat.row === this.settings.row + 1 && seat.seat === this.settings.label));
-            
+
             $counter.text(self.selectedSeats.length);
-            const newTotal = recalculateTotal(sc) - price;
-            $total.text(newTotal);
-            self.$emit('update-total', newTotal); // Emit the update-total event with the new total
+            $total.text(self.totalPrice);
+            self.$emit('update-total', self.totalPrice); // Emit the update-total event with the new total
 
             jQuery('#cart-item-' + this.settings.id).remove();
 
@@ -182,19 +254,11 @@ export default {
           makeRandomSeatsUnavailable();
         }
       }, 100); // Delay to ensure the seat chart is initialized
-
-      function recalculateTotal(sc) {
-        let total = 0;
-        sc.find('selected').each(function () {
-          total += price;
-        });
-
-        return total;
-      }
     });
   }
 };
 </script>
+
 
 <style scoped>
 .booking-details {
@@ -285,6 +349,20 @@ export default {
 
 .legend .selected {
   background-color: green;
+}
+
+.ticket-types {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+
+.ticket-types li::after {
+  content: ",";
+}
+
+.ticket-types li:last-child::after {
+  content: "";
 }
 
 #total {

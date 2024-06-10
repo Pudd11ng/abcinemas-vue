@@ -1,7 +1,7 @@
 <template>
   <div id="home-page">
     <HeaderPage />
-   	<section class="w3l-main-slider position-relative" id="home">
+    <section class="w3l-main-slider position-relative" id="home">
 		<div class="companies20-content">
 			<div class="owl-one owl-carousel owl-theme">
 				<div class="item">

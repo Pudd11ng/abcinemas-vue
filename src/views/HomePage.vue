@@ -1,434 +1,209 @@
 <template>
   <div id="home-page">
-    <HeaderPage />
-    <section class="w3l-main-slider position-relative" id="home">
-		<div class="companies20-content">
-			<div class="owl-one owl-carousel owl-theme">
-				<div class="item">
-					<li>
-						<div class="slider-info banner-view bg bg2">
-							<div class="banner-info">
-								<h3>Latest Movie Trailers</h3>
-								<p>Lorem ipsum dolor sit amet consectetur adipisicing elit.<span class="over-para">
-										Consequuntur hic odio
-										voluptatem tenetur consequatur.</span></p>
-								<a href="#small-dialog1" class="popup-with-zoom-anim play-view1">
-									<span class="video-play-icon">
-										<span class="fa fa-play"></span>
-									</span>
-									<h6>Watch Trailer</h6>
-								</a>
-								<div id="small-dialog1" class="zoom-anim-dialog mfp-hide">
-									<iframe src="https://player.vimeo.com/video/358205676" allow="autoplay; fullscreen"
-										allowfullscreen=""></iframe>
-								</div>
-							</div>
-						</div>
-					</li>
-				</div>
-				<div class="item">
-					<li>
-						<div class="slider-info  banner-view banner-top1 bg bg2">
-							<div class="banner-info">
-								<h3>Latest Online Movies</h3>
-								<p>Lorem ipsum dolor sit amet consectetur adipisicing elit.<span class="over-para">
-										Consequuntur hic odio
-										voluptatem tenetur consequatur.</span></p>
-								<a href="#small-dialog2" class="popup-with-zoom-anim play-view1">
-									<span class="video-play-icon">
-										<span class="fa fa-play"></span>
-									</span>
-									<h6>Watch Trailer</h6>
-								</a>
-								<div id="small-dialog2" class="zoom-anim-dialog mfp-hide">
-									<iframe src="https://player.vimeo.com/video/395376850" allow="autoplay; fullscreen"
-										allowfullscreen=""></iframe>
-								</div>
-							</div>
-						</div>
-					</li>
-				</div>
-				<div class="item">
-					<li>
-						<div class="slider-info banner-view banner-top2 bg bg2">
-							<div class="banner-info">
-								<h3>Latest Movie Trailers</h3>
-								<p>Lorem ipsum dolor sit amet consectetur adipisicing elit.<span class="over-para">
-										Consequuntur hic odio
-										voluptatem tenetur consequatur.</span></p>
-								<a href="#small-dialog3" class="popup-with-zoom-anim play-view1">
-									<span class="video-play-icon">
-										<span class="fa fa-play"></span>
-									</span>
-									<h6>Watch Trailer</h6>
-								</a>
-								<div id="small-dialog3" class="zoom-anim-dialog mfp-hide">
-									<iframe src="https://player.vimeo.com/video/389969665" allow="autoplay; fullscreen"
-										allowfullscreen=""></iframe>
-								</div>
-							</div>
-						</div>
-					</li>
-				</div>
-				<div class="item">
-					<li>
-						<div class="slider-info banner-view banner-top3 bg bg2">
-							<div class="banner-info">
-								<h3>Latest Online Movies</h3>
-								<p>Lorem ipsum dolor sit amet consectetur adipisicing elit.<span class="over-para">
-										Consequuntur hic odio
-										voluptatem tenetur consequatur.</span></p>
-								<a href="#small-dialog4" class="popup-with-zoom-anim play-view1">
-									<span class="video-play-icon">
-										<span class="fa fa-play"></span>
-									</span>
-									<h6>Watch Trailer</h6>
-								</a>
-								<div id="small-dialog4" class="zoom-anim-dialog mfp-hide">
-									<iframe src="https://player.vimeo.com/video/323491174" allow="autoplay; fullscreen"
-										allowfullscreen=""></iframe>
-								</div>
-							</div>
-						</div>
-					</li>
-				</div>
-			</div>
-		</div>
-	</section>
-	<!-- main-slider -->
-	<!--grids-sec1-->
-	<section class="w3l-grids">
-		<div class="grids-main py-5">
-			<div class="container py-lg-3">
-				<div class="headerhny-title">
-					<div class="w3l-title-grids">
-						<div class="headerhny-left">
-							<h3 class="hny-title">Popular Movies</h3>
-						</div>
-						<div class="headerhny-right text-lg-right">
-							<h4><a class="show-title" href="movies.html">Show all</a></h4>
-						</div>
-					</div>
-				</div>
-				<div class="w3l-populohny-grids">
-					<div class="item vhny-grid">
-						<div class="box16">
-							<a href="movies.html">
-								<figure>
-									<img class="img-fluid" src="assets/images/wednesday.jpeg" alt="">
-								</figure>
-								<div class="box-content">
-									<h3 class="title">A Wednesday</h3>
-									<h4> <span class="post"><span class="fa fa-clock-o"> </span> 1 Hr 4min
-
-										</span>
-
-										<span class="post fa fa-heart text-right"></span>
-									</h4>
-								</div>
-								<span class="fa fa-play video-icon" aria-hidden="true"></span>
-							</a>
-						</div>
-					</div>
-					<div class="item vhny-grid">
-						<div class="box16">
-							<a href="movies.html">
-								<figure>
-									<img class="img-fluid" src="assets/images/commando2.jpeg" alt="">
-								</figure>
-								<div class="box-content">
-									<h3 class="title">Commando-3</h3>
-									<h4> <span class="post"><span class="fa fa-clock-o"> </span> 1 Hr 4min
-
-										</span>
-
-										<span class="post fa fa-heart text-right"></span>
-									</h4>
-								</div>
-								<span class="fa fa-play video-icon" aria-hidden="true"></span>
-							</a>
-						</div>
-					</div>
-					<div class="item vhny-grid">
-						<div class="box16">
-							<a href="movies.html">
-								<figure>
-									<img class="img-fluid" src="assets/images/gujju2.jpeg" alt="">
-								</figure>
-								<div class="box-content">
-									<h3 class="title">Gujjubhai Most Wanted</h3>
-									<h4> <span class="post"><span class="fa fa-clock-o"> </span> 1 Hr 4min
-
-										</span>
-
-										<span class="post fa fa-heart text-right"></span>
-									</h4>
-								</div>
-								<span class="fa fa-play video-icon" aria-hidden="true"></span>
-							</a>
-						</div>
-					</div>
-					<div class="item vhny-grid">
-						<div class="box16">
-							<a href="movies.html">
-								<figure>
-									<img class="img-fluid" src="assets/images/avtar-2.jpeg" alt="">
-								</figure>
-								<div class="box-content">
-									<h3 class="title">Avatar</h3>
-									<h4> <span class="post"><span class="fa fa-clock-o"> </span> 1 Hr 4min
-
-										</span>
-
-										<span class="post fa fa-heart text-right"></span>
-									</h4>
-								</div>
-								<span class="fa fa-play video-icon" aria-hidden="true"></span>
-							</a>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-	</section>
-	<!--//grids-sec1-->
-	<!--grids-sec2-->
-	<section class="w3l-grids">
-		<div class="grids-main py-5">
-			<div class="container py-lg-3">
-				<div class="headerhny-title">
-					<div class="w3l-title-grids">
-						<div class="headerhny-left">
-							<h3 class="hny-title">New Releases</h3>
-						</div>
-						<div class="headerhny-right text-lg-right">
-							<h4><a class="show-title" href="movies.html">Show all</a></h4>
-						</div>
-					</div>
-				</div>
-				<div class="owl-three owl-carousel owl-theme">
-					<div class="item vhny-grid">
-						<div class="box16 mb-0">
-							<a href="movies.html">
-								<figure>
-									<img class="img-fluid" src="assets/images/n1.jpg" alt="">
-								</figure>
-								<div class="box-content">
-									<h4> <span class="post"><span class="fa fa-clock-o"> </span> 2 Hr 4min
-
-										</span>
-
-										<span class="post fa fa-heart text-right"></span>
-									</h4>
-								</div>
-								<span class="fa fa-play video-icon" aria-hidden="true"></span>
-							</a>
-						</div>
-						<h3> <a class="title-gd" href="movies.html">No Time to Die</a></h3>
-						<p>Lorem ipsum dolor sit amet consectetur adipisicing elit</p>
-						<div class="button-center text-center mt-4">
-							<a href="movies.html" class="btn watch-button">Watch now</a>
-						</div>
-
-					</div>
-					<div class="item vhny-grid">
-						<div class="box16 mb-0">
-							<a href="movies.html">
-								<figure>
-									<img class="img-fluid" src="assets/images/n2.jpg" alt="">
-								</figure>
-								<div class="box-content">
-
-									<h4> <span class="post"><span class="fa fa-clock-o"> </span> 2 Hr 4min
-
-										</span>
-
-										<span class="post fa fa-heart text-right"></span>
-									</h4>
-								</div>
-								<span class="fa fa-play video-icon" aria-hidden="true"></span>
-							</a>
-						</div>
-						<h3> <a class="title-gd" href="movies.html">Mulan</a></h3>
-						<p>Lorem ipsum dolor sit amet consectetur adipisicing elit</p>
-						<div class="button-center text-center mt-4">
-							<a href="movies.html" class="btn watch-button">Watch now</a>
-						</div>
-					</div>
-					<div class="item vhny-grid">
-						<div class="box16 mb-0">
-							<a href="movies.html">
-								<figure>
-									<img class="img-fluid" src="assets/images/n3.jpg" alt="">
-								</figure>
-								<div class="box-content">
-
-									<h4> <span class="post"><span class="fa fa-clock-o"> </span> 2 Hr 4min
-
-										</span>
-
-										<span class="post fa fa-heart text-right"></span>
-									</h4>
-								</div>
-								<span class="fa fa-play video-icon" aria-hidden="true"></span>
-							</a>
-						</div>
-						<h3> <a class="title-gd" href="movies.html">Free Guy</a></h3>
-						<p>Lorem ipsum dolor sit amet consectetur adipisicing elit</p>
-						<div class="button-center text-center mt-4">
-							<a href="movies.html" class="btn watch-button">Watch now</a>
-						</div>
-					</div>
-					<div class="item vhny-grid">
-						<div class="box16 mb-0">
-							<a href="movies.html">
-								<figure>
-									<img class="img-fluid" src="assets/images/n4.jpg" alt="">
-								</figure>
-								<div class="box-content">
-
-									<h4> <span class="post"><span class="fa fa-clock-o"> </span> 2 Hr 4min
-
-										</span>
-
-										<span class="post fa fa-heart text-right"></span>
-									</h4>
-								</div>
-								<span class="fa fa-play video-icon" aria-hidden="true"></span>
-							</a>
-						</div>
-						<h3> <a class="title-gd" href="movies.html">My Spy</a></h3>
-						<p>Lorem ipsum dolor sit amet consectetur adipisicing elit</p>
-						<div class="button-center text-center mt-4">
-							<a href="movies.html" class="btn watch-button">Watch now</a>
-						</div>
-
-					</div>
-					<div class="item vhny-grid">
-						<div class="box16 mb-0">
-							<a href="movies.html">
-								<figure>
-									<img class="img-fluid" src="assets/images/n5.jpg" alt="">
-								</figure>
-								<div class="box-content">
-
-									<h4> <span class="post"><span class="fa fa-clock-o"> </span> 2 Hr 4min
-
-										</span>
-
-										<span class="post fa fa-heart text-right"></span>
-									</h4>
-								</div>
-								<span class="fa fa-play video-icon" aria-hidden="true"></span>
-							</a>
-						</div>
-						<h3> <a class="title-gd" href="movies.html">Scoob</a></h3>
-						<p>Lorem ipsum dolor sit amet consectetur adipisicing elit</p>
-						<div class="button-center text-center mt-4">
-							<a href="movies.html" class="btn watch-button">Watch now</a>
-						</div>
-					</div>
-					<div class="item vhny-grid">
-						<div class="box16 mb-0">
-							<a href="movies.html">
-								<figure>
-									<img class="img-fluid" src="assets/images/n6.jpg" alt="">
-								</figure>
-								<div class="box-content">
-
-									<h4> <span class="post"><span class="fa fa-clock-o"> </span> 2 Hr 4min
-
-										</span>
-
-										<span class="post fa fa-heart text-right"></span>
-									</h4>
-								</div>
-								<span class="fa fa-play video-icon" aria-hidden="true"></span>
-							</a>
-						</div>
-						<h3> <a class="title-gd" href="movies.html">Downhill</a></h3>
-						<p>Lorem ipsum dolor sit amet consectetur adipisicing elit</p>
-						<div class="button-center text-center mt-4">
-							<a href="movies.html" class="btn watch-button">Watch now</a>
-						</div>
-					</div>
-				</div>
-			</div>
-
-		</div>
-	</section>
-	<!--grids-sec2-->
-	<!--mid-slider -->
-	<section class="w3l-mid-slider position-relative">
-		<div class="companies20-content">
-			<div class="owl-mid owl-carousel owl-theme">
-				<div class="item">
-					<li>
-						<div class="slider-info mid-view bg bg2">
-							<div class="container">
-								<div class="mid-info">
-									<span class="sub-text">Comedy</span>
-									<h3>Jumanji: The Next Level</h3>
-									<p>2019 ‧ Comedy/Action ‧ 2h 3m</p>
-									<a class="watch" href="movies.html"><span class="fa fa-play"
-											aria-hidden="true"></span>
-										Watch Trailer</a>
-								</div>
-							</div>
-						</div>
-					</li>
-				</div>
-				<div class="item">
-					<li>
-						<div class="slider-info mid-view mid-top1 bg bg2">
-							<div class="container">
-								<div class="mid-info">
-									<span class="sub-text">Adventure</span>
-									<h3>Dolittle</h3>
-									<p>2020 ‧ Family/Adventure ‧ 1h 41m</p>
-									<a class="watch" href="movies.html"><span class="fa fa-play"
-											aria-hidden="true"></span>
-										Watch Trailer</a>
-								</div>
-							</div>
-						</div>
-					</li>
-				</div>
-				<div class="item">
-					<li>
-						<div class="slider-info mid-view mid-top2 bg bg2">
-							<div class="container">
-								<div class="mid-info">
-									<span class="sub-text">Action</span>
-									<h3>Bad Boys for Life</h3>
-									<p>2020 ‧ Comedy/Action ‧ 2h 4m</p>
-									<a class="watch" href="movies.html"><span class="fa fa-play"
-											aria-hidden="true"></span>
-										Watch Trailer</a>
-								</div>
-							</div>
-						</div>
-					</li>
-				</div>
-			</div>
-		</div>
-	</section>
-	<FooterPage />
+	<HeaderPage />
+	<main>
+      <h2 class="movies-heading">Movies Currently On Screen</h2>
+      <div class="movies-grid">
+        <div 
+          class="movie-item" 
+          v-for="movie in moviesOnScreen" 
+          :key="movie.id" 
+          @mouseover="hoverMovie = movie.id" 
+          @mouseleave="hoverMovie = null"
+        >
+          <img :src="movie.poster" :alt="movie.title" />
+          <div class="movie-info" v-if="hoverMovie === movie.id">
+            <h3>{{ movie.title }}</h3>
+            <p>{{ movie.description }}</p>
+          </div>
+        </div>
+      </div>
+	  <div class = "movie-list">
+		<h3>Movie List:</h3>
+        <ul>
+          <li v-for="movie in moviesOnScreen" :key="movie.id">
+            {{ movie.title }}
+            <router-link :to="{ name: 'TicketBooking', params: { movieId: movie.id }}" class="movie-list-item">
+				<button class="book-tickets-btn">Book Tickets</button>
+			</router-link>
+          </li>
+        </ul>
+	  </div>
+    </main>
   </div>
 </template>
 
 <script>
-import HeaderPage from '@/components/HeaderPage.vue';
-import FooterPage from '@/components/FooterPage.vue';
+import HeaderPage from "@/components/HeaderPage.vue";
 
 export default {
-  name: 'HomePage',
+  name: "SignIn",
   components: {
     HeaderPage,
+  },
+  data() {
+    return {
+      hoverMovie: null,
+      moviesOnScreen: [
+        // Example movies, replace with actual data
+        { id: 1, title: 'How to Make Millions Before Grandma Dies', description: 'Description of Movie 1', poster:''  },
+        { id: 2, title: 'The Garfield Movie', description: 'Description of Movie 2', poster: 'path/to/poster2.jpg' },
+        { id: 3, title: 'Furiosa: A Mad Max Saga', description: 'Description of Movie 3', poster: 'path/to/poster3.jpg' },
+		{ id: 4, title: 'The Fall Guy', description: 'Description of Movie 4', poster: 'path/to/poster4.jpg' },
+		{ id: 5, title: 'Kingdom Of The Planet Of The Apes', description: 'Description of Movie 5', poster: 'path/to/poster5.jpg' },
+		{ id: 6, title: 'Hakiyu!! The Dumpster Battle', description: 'Description of Movie 6', poster: 'path/to/poster6.jpg' }
+      ]
+    };
+  },
+  created() {
+    this.fetchMoviesOnScreen();
+  },
+  methods: {
+    async fetchMoviesOnScreen() {
+      try {
+        // Replace with actual API call
+        // const response = await axios.get('/api/movies-on-screen');
+        // this.moviesOnScreen = response.data;
+
+        // Example static data
+        this.moviesOnScreen = [
+          { id: 1, title: 'How to Make Million Before Grandma Dies', description: 'Description of Movie 1', poster: 'path/to/poster1.jpg' },
+          { id: 2, title: 'The Garfield Movie', description: 'Description of Movie 2', poster: 'path/to/poster2.jpg' },
+          { id: 3, title: 'Furiosa: A Mad Max Saga', description: 'Description of Movie 3', poster: 'path/to/poster3.jpg' },
+		  { id: 4, title: 'The Fall Guy', description: 'Description of Movie 4', poster: 'path/to/poster4.jpg' },
+		{ id: 5, title: 'Kingdom Of The Planet Of The Apes', description: 'Description of Movie 5', poster: 'path/to/poster5.jpg' },
+		{ id: 6, title: 'Hakiyu!! The Dumpster Battle', description: 'Description of Movie 6', poster: 'path/to/poster6.jpg' }
+        ];
+      } catch (error) {
+        console.error('Error fetching movies:', error);
+      }
+    }
   }
-};
+}
+
+
 </script>
 
 <style scoped>
-@import '../assets/css/style-starter.css';
+#home-page {
+  padding: 0 20px;
+}
+
+.movies-heading {
+  margin: 20px 0 0 0;
+  font-size: 24px;
+  font-weight: bold;
+  text-align: left;
+}
+
+.main-content {
+  padding: 20px 0;
+}
+
+.movies-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: space-between;
+}
+
+.movie-item {
+  position: relative;
+  margin: 10px;
+  cursor: pointer;
+  overflow: hidden;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  transition: transform 0.3s ease;
+  width: calc(33.33% - 10px);
+}
+
+.movie-item:hover {
+  transform: scale(1.05);
+}
+
+.movie-item img {
+  width: 200px;
+  height: 300px;
+  object-fit: cover;
+  border-radius: 10px;
+}
+
+.movie-info {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.8);
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  padding: 20px;
+  box-sizing: border-box;
+  text-align: center;
+  border-radius: 10px;
+}
+
+.movie-info h3 {
+  margin: 0 0 10px;
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.movie-info p {
+  margin: 0;
+  font-size: 16px;
+}
+
+.movie-item:hover .movie-info {
+  opacity: 1;
+}
+
+.movie-list h3 {
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.movie-list ul {
+  list-style: none;
+  padding: 0;
+}
+
+.movie-list-item {
+  width: calc(50% - 10px); /* Two items per row with 10px spacing */
+  margin-bottom: 20px;
+}
+
+.movie-list li router-link {
+  text-decoration: none;
+  background-color: #007bff;
+  color: #fff;
+  padding: 5px 10px;
+  border-radius: 5px;
+  display: inline-block;
+}
+
+.book-tickets-btn {
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 14px;
+  text-decoration: none;
+}
+
+.book-tickets-btn:hover {
+  background-color: #0056b3;
+}
+
+.movie-list li {
+  margin-bottom: 10px;
+}
 </style>

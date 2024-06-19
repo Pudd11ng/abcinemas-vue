@@ -1,7 +1,7 @@
 <template>
   <div id="home-page">
-	<HeaderPage />
-	<main>
+    <HeaderPage />
+    <main>
       <h2 class="movies-heading">Movies Currently On Screen</h2>
       <div class="movies-grid">
         <div 
@@ -18,20 +18,20 @@
           </div>
         </div>
       </div>
-	  <div class = "movie-list">
-		<h3>Movie List:</h3>
+      <div class="movie-list">
+        <h3>Movie List:</h3>
         <ul>
           <li v-for="movie in moviesOnScreen" :key="movie.id">
             {{ movie.title }}
             <router-link :to="{ name: 'TicketBooking', params: { movieId: movie.id }}" class="movie-list-item">
-				<button class="book-tickets-btn">Book Tickets</button>
-			</router-link>
+              <button class="book-tickets-btn">Book Tickets</button>
+            </router-link>
           </li>
         </ul>
-	  </div>
-    <div class = "cinema-features">
-      <h3>Cinema Features: </h3>
-    </div>
+      </div>
+      <div class="cinema-features">
+        <h3>Cinema Features: </h3>
+      </div>
     </main>
   </div>
 </template>
@@ -52,9 +52,9 @@ export default {
         { id: 1, title: 'How to Make Millions Before Grandma Dies', description: 'Description of Movie 1', poster:''  },
         { id: 2, title: 'The Garfield Movie', description: 'Description of Movie 2', poster: 'path/to/poster2.jpg' },
         { id: 3, title: 'Furiosa: A Mad Max Saga', description: 'Description of Movie 3', poster: 'path/to/poster3.jpg' },
-		{ id: 4, title: 'The Fall Guy', description: 'Description of Movie 4', poster: 'path/to/poster4.jpg' },
-		{ id: 5, title: 'Kingdom Of The Planet Of The Apes', description: 'Description of Movie 5', poster: 'path/to/poster5.jpg' },
-		{ id: 6, title: 'Hakiyu!! The Dumpster Battle', description: 'Description of Movie 6', poster: 'path/to/poster6.jpg' }
+        { id: 4, title: 'The Fall Guy', description: 'Description of Movie 4', poster: 'path/to/poster4.jpg' },
+        { id: 5, title: 'Kingdom Of The Planet Of The Apes', description: 'Description of Movie 5', poster: 'path/to/poster5.jpg' },
+        { id: 6, title: 'Hakiyu!! The Dumpster Battle', description: 'Description of Movie 6', poster: 'path/to/poster6.jpg' }
       ]
     };
   },
@@ -73,9 +73,9 @@ export default {
           { id: 1, title: 'How to Make Million Before Grandma Dies', description: 'Description of Movie 1', poster: 'path/to/poster1.jpg' },
           { id: 2, title: 'The Garfield Movie', description: 'Description of Movie 2', poster: 'path/to/poster2.jpg' },
           { id: 3, title: 'Furiosa: A Mad Max Saga', description: 'Description of Movie 3', poster: 'path/to/poster3.jpg' },
-		  { id: 4, title: 'The Fall Guy', description: 'Description of Movie 4', poster: 'path/to/poster4.jpg' },
-		{ id: 5, title: 'Kingdom Of The Planet Of The Apes', description: 'Description of Movie 5', poster: 'path/to/poster5.jpg' },
-		{ id: 6, title: 'Hakiyu!! The Dumpster Battle', description: 'Description of Movie 6', poster: 'path/to/poster6.jpg' }
+          { id: 4, title: 'The Fall Guy', description: 'Description of Movie 4', poster: 'path/to/poster4.jpg' },
+          { id: 5, title: 'Kingdom Of The Planet Of The Apes', description: 'Description of Movie 5', poster: 'path/to/poster5.jpg' },
+          { id: 6, title: 'Hakiyu!! The Dumpster Battle', description: 'Description of Movie 6', poster: 'path/to/poster6.jpg' }
         ];
       } catch (error) {
         console.error('Error fetching movies:', error);
@@ -83,8 +83,6 @@ export default {
     }
   }
 }
-
-
 </script>
 
 <style scoped>

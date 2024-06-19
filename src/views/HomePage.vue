@@ -31,6 +31,12 @@
       </div>
       <div class="cinema-features">
         <h3>Cinema Features: </h3>
+        <div class="feature-item" v-for="(feature, index) in cinemaFeatures" :key="index">
+          <div class="feature-info">
+            <h3 class="feature-title">{{ feature.title }}</h3>
+            <p class="feature-description">{{ feature.description }}</p>
+          </div>
+        </div>
       </div>
     </main>
   </div>
@@ -55,6 +61,12 @@ export default {
         { id: 4, title: 'The Fall Guy', description: 'Description of Movie 4', poster: 'path/to/poster4.jpg' },
         { id: 5, title: 'Kingdom Of The Planet Of The Apes', description: 'Description of Movie 5', poster: 'path/to/poster5.jpg' },
         { id: 6, title: 'Hakiyu!! The Dumpster Battle', description: 'Description of Movie 6', poster: 'path/to/poster6.jpg' }
+      ],
+      cinemaFeatures: [
+        { title: 'IMAX Screens', description: 'Experience movies like never before.', image: 'imax.jpg' },
+        { title: 'Dolby Atmos Sound', description: 'Crystal clear sound quality for an immersive experience.', image: 'dolby-atmos.jpg' },
+        { title: 'Luxury Seating', description: 'Relax in our comfortable and luxurious seats.', image: 'luxury-seating.jpg' },
+        // Add more features as needed
       ]
     };
   },

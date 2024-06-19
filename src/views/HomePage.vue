@@ -29,6 +29,9 @@
           </li>
         </ul>
 	  </div>
+    <div class = "cinema-features">
+      <h3>Cinema Features: </h3>
+    </div>
     </main>
   </div>
 </template>

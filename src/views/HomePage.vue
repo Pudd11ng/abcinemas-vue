@@ -31,10 +31,17 @@
       </div>
       <div class="cinema-features">
         <h3>Cinema Features: </h3>
-        <div class="feature-item" v-for="(feature, index) in cinemaFeatures" :key="index">
-          <div class="feature-info">
-            <h3 class="feature-title">{{ feature.title }}</h3>
-            <p class="feature-description">{{ feature.description }}</p>
+        <div 
+          class="features-item" 
+          v-for="features in cinemaFeatures" 
+          :key="features.id" 
+          @mouseover="hoverFeatures = features.id" 
+          @mouseleave="hoverFeatures = null"
+        >
+          <img :src="features.poster" :alt="features.title" />
+          <div class="features-info" v-if="hoverFeatures === features.id">
+            <h3>{{ features.title }}</h3>
+            <p>{{ features.description }}</p>
           </div>
         </div>
       </div>
@@ -93,6 +100,17 @@ export default {
         console.error('Error fetching movies:', error);
       }
     }
+  },
+  async fetchFeaturesonScreen(){
+    try {
+        this.cinemaFeatures = [
+          { id: 1, title: 'IMAX Screens', description: 'Experience movies like never before.', poster: 'imax.jpg' },
+          { id: 2, title: 'Dolby Atmos Sound', description: 'Crystal clear sound quality for an immersive experience.', image: 'dolby-atmos.jpg' },
+          { id: 3, title: 'Luxury Seating', description: 'Relax in our comfortable and luxurious seats.', image: 'luxury-seating.jpg' }
+        ];
+      } catch (error) {
+        console.error('Error fetching Features:', error);
+      }
   }
 }
 </script>
@@ -218,5 +236,63 @@ export default {
 
 .movie-list li {
   margin-bottom: 10px;
+}
+
+.cinema-features {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+  text-align: center;
+}
+
+.cinema-features h3 {
+  font-size: 2em;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+.features-item {
+  display: inline-block;
+  margin: 10px;
+  position: relative;
+  width: 200px;
+  height: 300px;
+  border: 2px solid #ddd;
+  border-radius: 10px;
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.features-item:hover {
+  transform: scale(1.05);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+}
+
+.features-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-bottom: 2px solid #ddd;
+}
+
+.features-info {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(0, 0, 0, 0.8);
+  color: #fff;
+  padding: 10px;
+  text-align: left;
+}
+
+.features-info h3 {
+  margin: 0;
+  font-size: 1.2em;
+}
+
+.features-info p {
+  margin: 5px 0 0;
+  font-size: 0.9em;
 }
 </style>

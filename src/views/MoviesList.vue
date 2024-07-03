@@ -57,27 +57,45 @@ export default {
           { id: 1, title: "How to Make Millions Before Grandma Dies", poster: "path/to/how_to_make_millions_before_grandma_dies.jpg" },
           { id: 2, title: "Inside Out 2", poster: "path/to/inside_out_2.jpg" },
           { id: 3, title: "Bad Boys Ride or Die", poster: "path/to/bad_boys_ride_or_die.jpg" },
-          { id: 4, title: "I Not Stupid 3", poster: "path/to/i_not_stupid_3.jpg" }
+          { id: 4, title: "I Not Stupid 3", poster: "path/to/i_not_stupid_3.jpg" },
+          { id: 5, title: "Furiosa: A Mad Max Saga", poster:" "},
+          { id: 6, title: "The Garfield Movie", poster:""},
+          { id: 7, title: "Kingdom of the Planet of the Apes", poster:""},
+          { id: 8, title: "Haikyu: The Dumpster Battle!", poster:""},
+          { id: 9, title: "PADU", poster:""},
+          { id: 10, title: "Detective Conan vs Kid the Phantom Thief", poster:""},
+          { id: 11, title: "Twilight of The Warriors: Walled In", poster:""},
+          { id: 12, title: "The Watchers", poster:""}
         ],
         'Advance Sales': [
-          { id: 5, title: "Avatar 3", poster: "path/to/avatar_3.jpg" },
-          { id: 6, title: "Fast & Furious 10", poster: "path/to/fast_and_furious_10.jpg" }
+          { id: 13, title: "The Animal Kingdom", poster: "path/to/avatar_3.jpg" },
+          { id: 14, title: "World Tour: Born Pink in Cinemas", poster: "path/to/fast_and_furious_10.jpg" },
+          { id: 15, title: "Ride Above", poster:""},
+          { id: 16, title: "The Three Musketeers Milady", poster:""},
+          { id: 17, title: "Le Petit Nicolas", poster:""}
         ],
         'Coming Soon': [
-          { id: 7, title: "Mission Impossible 7", poster: "path/to/mission_impossible_7.jpg" },
-          { id: 8, title: "Guardians of the Galaxy Vol. 3", poster: "path/to/guardians_of_the_galaxy_vol_3.jpg" }
+          { id: 18, title: "Deadpool and Wolverine", poster: "path/to/mission_impossible_7.jpg" },
+          { id: 19, title: "Borderlands", poster: "path/to/guardians_of_the_galaxy_vol_3.jpg" },
+          { id: 20, title: "The Crow", poster:""},
+          { id: 21, title: "Transformer ONE", poster:""},
+          { id: 22, title: "Joker: DEUX", poster:""},
+          { id: 23, title: "Venom: The Last Dance", poster:""},
+          { id: 24, title: "Moana 2", poster:""},
+          { id: 25, title: "Sonic 3: The Hedgehog", poster: ""}
         ],
         'Getha Lux Suite': [
-          { id: 9, title: "Inception", poster: "path/to/inception.jpg" },
-          { id: 10, title: "Interstellar", poster: "path/to/interstellar.jpg" }
+          { id: 26, title: "Despicable Me 4", poster: "path/to/inception.jpg" },
+          { id: 27, title: "Inside Out 2", poster: "path/to/interstellar.jpg" },
+          { id: 28, title: "A Quiet Place Day One", poster: ""},
+          { id: 29, title: "Tarot", poster:""}
         ],
         'International Screens': [
-          { id: 11, title: "Parasite", poster: "path/to/parasite.jpg" },
-          { id: 12, title: "Spirited Away", poster: "path/to/spirited_away.jpg" }
+          { id: 30, title: "Parasite", poster: "path/to/parasite.jpg" },
+          { id: 31, title: "Brighton 4", poster: "path/to/spirited_away.jpg" }
         ],
         'Film Festivals': [
-          { id: 13, title: "The French Dispatch", poster: "path/to/the_french_dispatch.jpg" },
-          { id: 14, title: "Cannes Short Films", poster: "path/to/cannes_short_films.jpg" }
+          { id: 32, title: "Le French Festivals", poster: "path/to/the_french_dispatch.jpg" }
         ]
       }
     };

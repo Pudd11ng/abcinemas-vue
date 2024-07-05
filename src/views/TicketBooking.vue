@@ -434,7 +434,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 @import '../assets/css/style-starter.css';
 @import '../assets/css/progress.css';
 @import '../assets/css/ticket-booking.css';

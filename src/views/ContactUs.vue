@@ -21,4 +21,7 @@ export default {
 };
 </script>
 
-<style src="../assets/css/contact_us.css"></style>
+<style scoped>
+@import "@/assets/css/contact_us.css";
+
+</style>

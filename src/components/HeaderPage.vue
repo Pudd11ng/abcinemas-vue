@@ -1,11 +1,14 @@
 <template>
   <header id="site-header" class="w3l-header fixed-top">
-    <!--/nav-->
-    <nav class="navbar navbar-expand-lg navbar-light fill px-lg-0 py-0 px-3" style="height: 60px;">
-      <div class="container style=height: 5px;">
+    <nav
+      class="navbar navbar-expand-lg navbar-light fill px-lg-0 py-0 px-3"
+      style="height: 60px"
+    >
+      <div class="container" style="height: 60px">
         <h1>
           <router-link class="navbar-brand" to="/">
-            <span class="fa fa-play icon-log" aria-hidden="true"></span> ABCinemas
+            <span class="fa fa-play icon-log" aria-hidden="true"></span>
+            ABCinemas
           </router-link>
         </h1>
         <button
@@ -33,11 +36,12 @@
               <router-link class="nav-link" to="/about">About</router-link>
             </li>
             <li class="nav-item">
-              <router-link class="nav-link" to="/contact-us">Contact</router-link>
+              <router-link class="nav-link" to="/contact-us"
+                >Contact</router-link
+              >
             </li>
           </ul>
 
-          <!--/search-right-->
           <div class="search-right">
             <a
               href="#search"
@@ -47,7 +51,6 @@
               Search
               <span class="fa fa-search ml-3" aria-hidden="true"></span>
             </a>
-            <!-- search popup -->
             <div id="search" class="pop-overlay">
               <div class="popup">
                 <form action="#" method="post" class="search-box">
@@ -78,19 +81,20 @@
               </div>
               <a class="close" href="#close">×</a>
             </div>
-            <!-- /search popup -->
           </div>
           <div
             class="Login_SignUp"
             id="login"
             style="font-size: 2rem; display: inline-block; position: relative"
           >
-            <router-link class="nav-link" to="/sign-in">
+            <router-link class="nav-link" to="/profile" v-if="userId">
+              <i class="fa fa-user-circle-o"></i>
+            </router-link>
+            <router-link class="nav-link" to="/sign-in" v-else>
               <i class="fa fa-user-circle-o"></i>
             </router-link>
           </div>
         </div>
-        <!-- toggle switch for light and dark theme -->
         <div class="mobile-position">
           <nav class="navigation">
             <div class="theme-switch-wrapper">
@@ -110,8 +114,22 @@
 </template>
 
 <script>
+import { useUserStore } from "@/stores/userStore";
+import { computed } from "vue";
+
 export default {
   name: "HeaderPage",
+  setup() {
+    const userStore = useUserStore();
+    const userId = computed(() => userStore.userId);
+    const userEmail = computed(() => userStore.userEmail);
+    console.log("current user id", userStore.userId);
+
+    return {
+      userId,
+      userEmail,
+    };
+  },
   mounted() {
     this.initializeThemeSwitch();
   },
@@ -127,9 +145,9 @@ export default {
 </script>
 
 <style scoped>
-@import '../assets/css/style-starter.css';
+@import "../assets/css/style-starter.css";
 
 element.style {
-    height: 60px;
+  height: 60px;
 }
 </style>

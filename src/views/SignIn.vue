@@ -134,6 +134,7 @@ export default {
   },
   methods: {
     async signUp() {
+      const userStore = useUserStore();
       try {
         const response = await axios.post("http://localhost:8088/users", {
           full_name: this.signUpName,
@@ -143,6 +144,10 @@ export default {
           phone_number: this.signUpPhoneNumber,
         });
         console.log("Sign up successful:", response.data);
+        const userId = response.data.user_id;
+        const userEmail = response.data.email;
+        userStore.setUser(userId, userEmail);
+        router.push({ path: "/" });
       } catch (error) {
         console.error("Sign up error:", error);
       }

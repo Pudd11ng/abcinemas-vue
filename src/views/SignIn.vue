@@ -146,7 +146,8 @@ export default {
         console.log("Sign up successful:", response.data);
         const userId = response.data.user_id;
         const userEmail = response.data.email;
-        userStore.setUser(userId, userEmail);
+        const userRole = response.data.role;
+        userStore.setUser(userId, userEmail, userRole);
         router.push({ path: "/" });
       } catch (error) {
         console.error("Sign up error:", error);
@@ -162,7 +163,8 @@ export default {
         console.log("Sign in successful:", response.data);
         const userId = response.data.user_id;
         const userEmail = response.data.email;
-        userStore.setUser(userId, userEmail);
+        const userRole = response.data.role;
+        userStore.setUser(userId, userEmail, userRole);
         router.push({ path: "/" });
       } catch (error) {
         console.error("Sign in error:", error);

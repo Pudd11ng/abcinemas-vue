@@ -4,11 +4,13 @@ export const useUserStore = defineStore('user', {
   state: () => ({
     userId: null,
     userEmail: null,
+    userRole: null,
   }),
   actions: {
-    setUser(userId, userEmail) {
+    setUser(userId, userEmail, userRole) {
       this.userId = userId;
       this.userEmail = userEmail;
+      this.userRole = userRole;
     },
     clearUser() {
       this.userId = null;

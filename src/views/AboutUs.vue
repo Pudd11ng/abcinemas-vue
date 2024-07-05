@@ -21,7 +21,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 /* If you create about.css later, include the correct path here */
 /* src="../assets/css/about.css" */
 </style>

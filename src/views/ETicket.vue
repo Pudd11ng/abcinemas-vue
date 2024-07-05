@@ -55,20 +55,19 @@
   </div>
 </template>
 
-
 <script>
-import HeaderPage from '@/components/HeaderPage.vue';
-import QRCode from 'qrcode';
-import jsPDF from 'jspdf';
+import HeaderPage from "@/components/HeaderPage.vue";
+import QRCode from "qrcode";
+import jsPDF from "jspdf";
 
 export default {
-  name: 'ETicket',
+  name: "ETicket",
   components: {
-    HeaderPage
+    HeaderPage,
   },
   data() {
     return {
-      tickets: []
+      tickets: [],
     };
   },
   mounted() {
@@ -80,7 +79,7 @@ export default {
           this.generateQRCodes();
         });
       } catch (error) {
-        console.error('Failed to parse tickets:', error);
+        console.error("Failed to parse tickets:", error);
       }
     }
   },
@@ -88,15 +87,15 @@ export default {
     generateQRCodes() {
       this.tickets.forEach((ticket, index) => {
         const qrData = `${ticket.movieTitle}-${ticket.branch}-${ticket.hall}-${ticket.row}-${ticket.seat}-${ticket.date}-${ticket.time}`; // Unique data for QR code
-        const canvas = this.$refs['qrcodeCanvas' + index][0]; // Accessing the canvas element
+        const canvas = this.$refs["qrcodeCanvas" + index][0]; // Accessing the canvas element
         QRCode.toCanvas(canvas, qrData, function (error) {
           if (error) console.error(error);
-          console.log('QR code generated successfully!');
+          console.log("QR code generated successfully!");
         });
       });
     },
     returnToHome() {
-      this.$router.push('/');
+      this.$router.push("/");
     },
     downloadPDF() {
       const pdf = new jsPDF();
@@ -105,7 +104,7 @@ export default {
           pdf.addPage();
         }
         pdf.setFontSize(20);
-        pdf.text('ABCinemas PRESENTS', 10, 20);
+        pdf.text("ABCinemas PRESENTS", 10, 20);
         pdf.text(ticket.movieTitle, 10, 30);
         pdf.setFontSize(12);
         pdf.text(`BRANCH: ${ticket.branch}`, 10, 40);
@@ -116,20 +115,19 @@ export default {
         pdf.text(`DATE: ${ticket.date}`, 10, 90);
         pdf.text(`TIME: ${ticket.time}`, 10, 100);
 
-        const canvas = this.$refs['qrcodeCanvas' + index][0];
-        const imgData = canvas.toDataURL('image/png');
-        pdf.addImage(imgData, 'PNG', 150, 50, 50, 50); // Adjust position and size as needed
+        const canvas = this.$refs["qrcodeCanvas" + index][0];
+        const imgData = canvas.toDataURL("image/png");
+        pdf.addImage(imgData, "PNG", 150, 50, 50, 50); // Adjust position and size as needed
       });
-      pdf.save('e-tickets.pdf');
-    }
-  }
+      pdf.save("e-tickets.pdf");
+    },
+  },
 };
 </script>
 
-
-<style src="../assets/css/e-ticket.css"></style>
-
 <style scoped>
+@import "@/assets/css/e-ticket.css";
+
 .tickets-container {
   display: flex;
   flex-wrap: nowrap;

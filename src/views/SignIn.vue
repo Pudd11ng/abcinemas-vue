@@ -37,13 +37,15 @@
               v-model="signUpDateOfBirth"
               required
             />
-            <input
+            <vue-tel-input
               name="sign-up-phone"
-              type="text"
-              placeholder="Phone Number"
               v-model="signUpPhoneNumber"
-              required
-            /><br />
+              :only-countries="['MY']"
+              @on-input="phoneValidate"
+              validCharactersOnly
+            ></vue-tel-input>
+            <p v-if="!isValid" class="error">Invalid phone number</p>
+            <br />
             <button>Sign Up</button>
           </form>
         </div>
@@ -102,14 +104,33 @@ import axios from "axios";
 import { useUserStore } from "@/stores/userStore";
 import router from "@/router/index.js";
 import "@/assets/js/theme-change.js";
+import { ref } from "vue";
 
 export default {
   name: "SignIn",
   components: {
     HeaderPage,
   },
+  // setup() {
+  //   const isValid = ref(true);
+
+  //   const phoneValidate = (number, object) => {
+  //     console.log(object);
+  //     if (object.valid === true) {
+  //       isValid.value = true;
+  //     } else {
+  //       isValid.value = false;
+  //     }
+  //   };
+
+  //   return {
+  //     isValid,
+  //     phoneValidate,
+  //   };
+  // },
   data() {
     return {
+      isValid: true,
       signUpName: "",
       signUpEmail: "",
       signUpPassword: "",
@@ -133,7 +154,24 @@ export default {
     });
   },
   methods: {
+    phoneValidate(number, object) {
+      console.log(object);
+      this.isValid = object.valid;
+    },
     async signUp() {
+      if (
+        !this.signUpName.trim() ||
+        !this.signUpEmail.trim() ||
+        !this.signUpPassword.trim() ||
+        !this.signUpDateOfBirth.trim() ||
+        !this.signUpPhoneNumber.trim()
+      ) {
+        alert("All fields are required and valid.");
+        return;
+      } else if (!this.isValid) {
+        alert("Invalid phone number.");
+        return;
+      }
       const userStore = useUserStore();
       try {
         const response = await axios.post("http://localhost:8088/users", {
@@ -148,9 +186,11 @@ export default {
         const userEmail = response.data.email;
         const userRole = response.data.role;
         userStore.setUser(userId, userEmail, userRole);
+        alert("Sign up successfully");
         router.push({ path: "/" });
       } catch (error) {
         console.error("Sign up error:", error);
+        alert("Sign up fail, please try again");
       }
     },
     async signIn() {
@@ -168,6 +208,7 @@ export default {
         router.push({ path: "/" });
       } catch (error) {
         console.error("Sign in error:", error);
+        alert("Sign in fail, please try again");
       }
     },
   },
@@ -177,4 +218,41 @@ export default {
 <style scoped>
 @import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css");
 @import "@/assets/css/sign-in.css";
+
+.vue-tel-input {
+  width: 100%;
+  margin-bottom: 10px;
+  border-width: 0;
+}
+
+.error {
+  color: red;
+  font-size: 0.9em;
+}
+
+button {
+	border-radius: 20px;
+	border: 1px solid #FF4B2B;
+	background-color: #FF4B2B;
+	color: #FFFFFF;
+	font-size: 12px;
+	font-weight: bold;
+	padding: 12px 45px;
+	letter-spacing: 1px;
+	text-transform: uppercase;
+	transition: transform 80ms ease-in;
+}
+
+button:active {
+	transform: scale(0.95);
+}
+
+button:focus {
+	outline: none;
+}
+
+button.ghost {
+	background-color: transparent;
+	border-color: #FFFFFF;
+}
 </style>

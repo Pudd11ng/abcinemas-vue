@@ -104,30 +104,12 @@ import axios from "axios";
 import { useUserStore } from "@/stores/userStore";
 import router from "@/router/index.js";
 import "@/assets/js/theme-change.js";
-import { ref } from "vue";
 
 export default {
   name: "SignIn",
   components: {
     HeaderPage,
   },
-  // setup() {
-  //   const isValid = ref(true);
-
-  //   const phoneValidate = (number, object) => {
-  //     console.log(object);
-  //     if (object.valid === true) {
-  //       isValid.value = true;
-  //     } else {
-  //       isValid.value = false;
-  //     }
-  //   };
-
-  //   return {
-  //     isValid,
-  //     phoneValidate,
-  //   };
-  // },
   data() {
     return {
       isValid: true,
@@ -155,8 +137,9 @@ export default {
   },
   methods: {
     phoneValidate(number, object) {
-      console.log(object);
-      this.isValid = object.valid;
+      if (number != "") {
+        this.isValid = object.valid;
+      }
     },
     async signUp() {
       if (
@@ -190,7 +173,9 @@ export default {
         router.push({ path: "/" });
       } catch (error) {
         console.error("Sign up error:", error);
-        alert("Sign up fail, please try again");
+        alert(
+          "Sign up fail, please try again. Error: " + error.response.data.error
+        );
       }
     },
     async signIn() {
@@ -205,10 +190,17 @@ export default {
         const userEmail = response.data.email;
         const userRole = response.data.role;
         userStore.setUser(userId, userEmail, userRole);
-        router.push({ path: "/" });
+        if (userRole == "admin") {
+          router.push({ path: "/admin-user" });
+        } else if (userRole == "user") {
+          router.push({ path: "/" });
+        }
       } catch (error) {
         console.error("Sign in error:", error);
-        alert("Sign in fail, please try again");
+        alert(
+          "Sign in fail, please try again. Error: " +
+            error.response.data.message
+        );
       }
     },
   },
@@ -231,28 +223,28 @@ export default {
 }
 
 button {
-	border-radius: 20px;
-	border: 1px solid #FF4B2B;
-	background-color: #FF4B2B;
-	color: #FFFFFF;
-	font-size: 12px;
-	font-weight: bold;
-	padding: 12px 45px;
-	letter-spacing: 1px;
-	text-transform: uppercase;
-	transition: transform 80ms ease-in;
+  border-radius: 20px;
+  border: 1px solid #ff4b2b;
+  background-color: #ff4b2b;
+  color: #ffffff;
+  font-size: 12px;
+  font-weight: bold;
+  padding: 12px 45px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  transition: transform 80ms ease-in;
 }
 
 button:active {
-	transform: scale(0.95);
+  transform: scale(0.95);
 }
 
 button:focus {
-	outline: none;
+  outline: none;
 }
 
 button.ghost {
-	background-color: transparent;
-	border-color: #FFFFFF;
+  background-color: transparent;
+  border-color: #ffffff;
 }
 </style>

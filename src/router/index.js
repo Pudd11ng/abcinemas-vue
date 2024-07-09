@@ -8,6 +8,7 @@ import SignIn from '../views/SignIn.vue';
 import UserProfile from '../views/ProfilePage.vue';
 import TicketBooking from '../views/TicketBooking.vue';
 import SeatSelection from '../views/SeatSelection.vue';
+import AdminUser from '../views/AdminUser.vue';
 
 const routes = [
   { path: '/', name: 'Home', component: Home },
@@ -19,6 +20,7 @@ const routes = [
   { path: '/profile', name: 'UserProfile', component: UserProfile },
   { path: '/ticket-booking', name: 'TicketBooking', component: TicketBooking },
   { path: '/seat-selection', name: 'SeatSelection', component: SeatSelection },
+  { path: '/admin-user', name: 'AdminUser', component: AdminUser },
 ];
 
 const router = createRouter({

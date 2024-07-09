@@ -1,43 +1,67 @@
 <template>
-  <div :class="{ 'shifted-content': isSidebarOpen }">
-    <AdminAside @sidebar-toggled="handleSidebarToggle" />
-    <div class="content">
-      <div class="card-header">
-        <h4>User</h4>
-        <div class="search-container">
-          <input
-            type="text"
-            v-model="searchTerm"
-            placeholder="Search by name or email..."
-          />
-          <button @click="searchUsers">Search</button>
+  <div id="admin-user">
+    <div :class="{ 'shifted-content': isSidebarOpen }">
+      <AdminAside @sidebar-toggled="handleSidebarToggle" />
+      <div class="content">
+        <div class="card-display-container">
+          <div class="card chart-card">
+            <div class="card-header">
+              <h4>User Registration Chart</h4>
+            </div>
+            <div class="chart-container">
+              <CanvasJSChart :options="options" />
+            </div>
+          </div>
+          <div class="card total-users-card">
+            <div class="card-header">
+              <h4>Total Registered Users</h4>
+            </div>
+            <div class="card-content">
+              <p>{{ users.length }}</p>
+            </div>
+          </div>
         </div>
-      </div>
-      <div class="table-wrapper">
-        <table class="styled-table">
-          <thead>
-            <tr>
-              <th>ID</th>
-              <th>Name</th>
-              <th>Email</th>
-              <th>Date of Birth</th>
-              <th>Registration Date</th>
-              <th>Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="user in filteredUsers" :key="user.user_id">
-              <td>{{ user.user_id }}</td>
-              <td>{{ user.full_name }}</td>
-              <td>{{ user.email }}</td>
-              <td>{{ formatDate(user.date_of_birth) }}</td>
-              <td>{{ formatDateTime(user.registration_date) }}</td>
-              <td>
-                <button @click="confirmDelete(user.user_id)">Delete</button>
-              </td>
-            </tr>
-          </tbody>
-        </table>
+
+        <div class="data-container">
+          <div class="card-header">
+            <h4>User List</h4>
+            <div class="search-container">
+              <input
+                type="text"
+                v-model="searchTerm"
+                placeholder="Search by name or email..."
+                class="search-input"
+              />
+              <button @click="searchUsers" class="search-button">Search</button>
+            </div>
+          </div>
+          <div class="table-wrapper">
+            <table class="styled-table">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Name</th>
+                  <th>Email</th>
+                  <th>Date of Birth</th>
+                  <th>Registration Date</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr v-for="user in filteredUsers" :key="user.user_id">
+                  <td>{{ user.user_id }}</td>
+                  <td>{{ user.full_name }}</td>
+                  <td>{{ user.email }}</td>
+                  <td>{{ formatDate(user.date_of_birth) }}</td>
+                  <td>{{ formatDateTime(user.registration_date) }}</td>
+                  <td>
+                    <button @click="confirmDelete(user.user_id)">Delete</button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -57,6 +81,36 @@ export default {
       users: [],
       searchTerm: "",
       isSidebarOpen: false,
+      options: {
+        theme: "light2",
+        animationEnabled: true,
+        exportEnabled: true,
+        title: {
+          text: "User Registration Dates Per Month",
+        },
+        axisX: {
+          valueFormatString: "MMMM",
+          interval: 1,
+          intervalType: "month",
+        },
+        axisY: {
+          title: "Number of Users",
+          suffix: "",
+        },
+        toolTip: {
+          shared: true,
+        },
+        height: 250,
+        data: [
+          {
+            type: "spline",
+            xValueFormatString: "MMM",
+            yValueFormatString: "#,###",
+            name: "Registrations",
+            dataPoints: [],
+          },
+        ],
+      },
     };
   },
   mounted() {
@@ -85,6 +139,7 @@ export default {
         .get("http://localhost:8088/users")
         .then((response) => {
           this.users = response.data;
+          this.updateChart();
         })
         .catch((error) => {
           console.error("Error fetching users:", error);
@@ -126,6 +181,27 @@ export default {
     searchUsers() {
       this.fetchUsers();
     },
+    updateChart() {
+      const registrationCounts = this.users.reduce((acc, user) => {
+        const month = new Date(user.registration_date).getMonth();
+        acc[month] = (acc[month] || 0) + 1;
+        return acc;
+      }, []);
+
+      const dataPoints = Object.keys(registrationCounts).map((month) => ({
+        x: new Date(0, month),
+        y: registrationCounts[month],
+      }));
+
+      this.options = {
+        ...this.options,
+        data: [{ ...this.options.data[0], dataPoints }],
+      };
+
+      this.$nextTick(() => {
+        this.options = { ...this.options };
+      });
+    },
   },
 };
 </script>
@@ -133,31 +209,73 @@ export default {
 <style scoped>
 .content {
   position: fixed;
-  top: 15%; 
+  top: 15%;
   left: 50%;
-  transform: translateX(-50%); 
+  transform: translateX(-50%);
   transition: all 0.5s ease;
   padding: 15px;
+  width: 80%;
+  height: 80%;
+  overflow-y: auto;
 }
 
-.shifted-content {
-  margin-left: 250px;
-  transition: all 0.5s ease;
+.content::-webkit-scrollbar {
+  display: none;
+}
+
+.card-display-container {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.chart-card {
+  flex: 0 0 80%;
+}
+
+.total-users-card {
+  flex: 0 0 20%;
+}
+
+.card {
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
 }
 
 .card-header {
   background-color: #212529;
-  border-radius: 10px 10px 0 0;
-  margin-bottom: 0;
   padding: 15px;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  color: #fff;
 }
 
 .card-header h4 {
-  color: #ffffff;
   margin: 0;
+}
+
+.chart-container {
+  padding: 20px;
+  height: 280px;
+}
+
+.total-users-card .card-content {
+  padding: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.card-content p {
+  font-size: 2rem;
+  margin: 0;
+}
+
+.data-container {
+  margin-top: 20px;
 }
 
 .search-container {
@@ -165,7 +283,8 @@ export default {
   align-items: center;
 }
 
-.search-container input[type="text"] {
+.search-input {
+  color: black;
   padding: 8px;
   border: 1px solid #ccc;
   border-radius: 4px;
@@ -173,7 +292,7 @@ export default {
   width: 300px;
 }
 
-.search-container button {
+.search-button {
   background-color: #007bff;
   color: white;
   border: none;
@@ -183,13 +302,12 @@ export default {
   transition: background-color 0.3s ease;
 }
 
-.search-container button:hover {
+.search-button:hover {
   background-color: #0056b3;
 }
 
 .table-wrapper {
-  overflow-x: auto;
-  min-width: 600px;
+  margin-top: 0;
 }
 
 .styled-table {
@@ -198,8 +316,6 @@ export default {
   font-size: 0.9em;
   font-family: sans-serif;
   width: 100%;
-  min-width: 600px;
-
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
 }
 
@@ -225,11 +341,6 @@ export default {
 
 .styled-table tbody tr:last-of-type {
   border-bottom: 2px solid #212529;
-}
-
-.styled-table tbody tr.active-row {
-  font-weight: bold;
-  color: #212529;
 }
 
 button {

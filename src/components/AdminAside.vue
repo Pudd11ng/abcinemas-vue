@@ -8,7 +8,7 @@
     <!-- find your icon here boxicons.com-->
     <ul class="nav-list">
       <li>
-        <router-link to="/admin-user">
+        <router-link to="/admin-user" @click="updatePageTitle('User Management')">
           <i class="bx bx-user"></i>
           <span class="links_name">User</span>
         </router-link>
@@ -24,6 +24,9 @@
     </ul>
   </div>
   <div class="blue-flag"></div>
+  <div class="title">
+    <h1>{{ pageTitle }}</h1>
+  </div>
 </template>
 
 <script>
@@ -35,12 +38,16 @@ export default {
   data() {
     return {
       isSidebarOpen: false,
+      pageTitle: "User Management",
     };
   },
   methods: {
     toggleSidebar() {
       this.isSidebarOpen = !this.isSidebarOpen;
       this.$emit("sidebar-toggled", this.isSidebarOpen);
+    },
+    updatePageTitle(title) {
+      this.pageTitle = title;
     },
     logout() {
       const userStore = useUserStore();
@@ -220,5 +227,13 @@ export default {
   position: absolute;
   width: 100%;
   z-index: -1;
+}
+
+.title {
+  color: #11101d;
+  top: 3%;
+  left: 20%;
+  position: absolute;
+  z-index: 1;
 }
 </style>

@@ -109,6 +109,9 @@ export default {
         router.push({ path: "/profile" });
       } catch (error) {
         console.error("Error updating user data:", error);
+        alert(
+          "User profile update fail. Error: " + error.response.data.error
+        );
       }
     };
 

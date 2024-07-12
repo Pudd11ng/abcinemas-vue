@@ -62,17 +62,17 @@ export default {
       hoverMovie: null,
       moviesOnScreen: [
         // Example movies, replace with actual data
-        { id: 1, title: 'How to Make Millions Before Grandma Dies', description: 'Description of Movie 1', poster:''  },
-        { id: 2, title: 'The Garfield Movie', description: 'Description of Movie 2', poster: 'path/to/poster2.jpg' },
-        { id: 3, title: 'Furiosa: A Mad Max Saga', description: 'Description of Movie 3', poster: 'path/to/poster3.jpg' },
-        { id: 4, title: 'The Fall Guy', description: 'Description of Movie 4', poster: 'path/to/poster4.jpg' },
-        { id: 5, title: 'Kingdom Of The Planet Of The Apes', description: 'Description of Movie 5', poster: 'path/to/poster5.jpg' },
-        { id: 6, title: 'Hakiyu!! The Dumpster Battle', description: 'Description of Movie 6', poster: 'path/to/poster6.jpg' }
+        { id: 1, title: 'How to Make Millions Before Grandma Dies', description: 'M, a university dropout low on money and luck, volunteers to take care of his terminally ill Amah in the hopes for an inheritance.', poster : require("@/assets/images/HowToMakeMillions.jpeg")},
+        { id: 2, title: 'The Garfield Movie', description: 'After an unexpected reunion with his long-lost father, the street cat Vic, Garfield is forced to leave his very comfortable life with Harald behind. Together with Vic and Odie, he plans a crazy robbery.', poster: require("@/assets/images/garfield.jpeg") },
+        { id: 3, title: 'Furiosa: A Mad Max Saga', description: 'Snatched from the Green Place of Many Mothers, young Furiosa falls into the hands of a great biker horde led by the warlord Dementus. Sweeping through the Wasteland, they come across the Citadel, presided over by the Immortan Joe. As the two tyrants fight for dominance, Furiosa soon finds herself in a nonstop battle to make her way home.', poster: require("@/assets/images/furiosa.jpeg") },
+        { id: 4, title: 'The Fall Guy', description: 'After leaving the business one year earlier, battle-scarred stuntman Colt Seavers springs back into action when the star of a big studio movie suddenly disappears. As the mystery surrounding the missing actor deepens, Colt soon finds himself ensnared in a sinister plot that pushes him to the edge of a fall more dangerous than any stunt.', poster: require("@/assets/images/fall guy.jpeg") },
+        { id: 5, title: 'Kingdom Of The Planet Of The Apes', description: 'Many years after the reign of Caesar, a young ape goes on a journey that will lead him to question everything he has been taught about the past and make choices that will define a future for apes and humans alike.', poster: require("@/assets/images/planetoftheapes.jpeg") },
+        { id: 6, title: 'Hakiyu!! The Dumpster Battle', description: 'Shoyo Hinata joins Karasuno high school of volleyball team to emulate his idol, the Little Giant ,but he has to team up with Tobio Kageyama, his former rival.', poster: require("@/assets/images/hakiyuu.jpeg") }
       ],
       cinemaFeatures: [
-        { title: 'IMAX Screens', description: 'Experience movies like never before.', image: 'imax.jpg' },
-        { title: 'Dolby Atmos Sound', description: 'Crystal clear sound quality for an immersive experience.', image: 'dolby-atmos.jpg' },
-        { title: 'Luxury Seating', description: 'Relax in our comfortable and luxurious seats.', image: 'luxury-seating.jpg' },
+        { title: 'IMAX Screens', description: 'Experience movies like never before.', poster:  require("@/assets/images/imax.jpeg") },
+        { title: 'Dolby Atmos Sound', description: 'Crystal clear sound quality for an immersive experience.', poster:  require("@/assets/images/dolbyatmos.jpeg")},
+        { title: 'Luxury Seating', description: 'Relax in our comfortable and luxurious seats.', poster:  require("@/assets/images/luxuryseating.jpeg")},
         // Add more features as needed
       ]
     };
@@ -89,12 +89,12 @@ export default {
 
         // Example static data
         this.moviesOnScreen = [
-          { id: 1, title: 'How to Make Million Before Grandma Dies', description: 'Description of Movie 1', poster: 'path/to/poster1.jpg' },
-          { id: 2, title: 'The Garfield Movie', description: 'Description of Movie 2', poster: 'path/to/poster2.jpg' },
-          { id: 3, title: 'Furiosa: A Mad Max Saga', description: 'Description of Movie 3', poster: 'path/to/poster3.jpg' },
-          { id: 4, title: 'The Fall Guy', description: 'Description of Movie 4', poster: 'path/to/poster4.jpg' },
-          { id: 5, title: 'Kingdom Of The Planet Of The Apes', description: 'Description of Movie 5', poster: 'path/to/poster5.jpg' },
-          { id: 6, title: 'Hakiyu!! The Dumpster Battle', description: 'Description of Movie 6', poster: 'path/to/poster6.jpg' }
+          { id: 1, title: 'How to Make Million Before Grandma Dies', description: 'M, a university dropout low on money and luck, volunteers to take care of his terminally ill Amah in the hopes for an inheritance.', poster: require("@/assets/images/HowToMakeMillions.jpeg") },
+          { id: 2, title: 'The Garfield Movie', description: 'After an unexpected reunion with his long-lost father, the street cat Vic, Garfield is forced to leave his very comfortable life with Harald behind. Together with Vic and Odie, he plans a crazy robbery.', poster: require("@/assets/images/garfield.jpeg") },
+          { id: 3, title: 'Furiosa: A Mad Max Saga', description: 'Snatched from the Green Place of Many Mothers, young Furiosa falls into the hands of a great biker horde led by the warlord Dementus. Sweeping through the Wasteland, they come across the Citadel, presided over by the Immortan Joe. As the two tyrants fight for dominance, Furiosa soon finds herself in a nonstop battle to make her way home.', poster: require("@/assets/images/furiosa.jpeg") },
+          { id: 4, title: 'The Fall Guy', description: 'After leaving the business one year earlier, battle-scarred stuntman Colt Seavers springs back into action when the star of a big studio movie suddenly disappears. As the mystery surrounding the missing actor deepens, Colt soon finds himself ensnared in a sinister plot that pushes him to the edge of a fall more dangerous than any stunt.', poster: require("@/assets/images/fall guy.jpeg") },
+          { id: 5, title: 'Kingdom Of The Planet Of The Apes', description: 'Many years after the reign of Caesar, a young ape goes on a journey that will lead him to question everything he has been taught about the past and make choices that will define a future for apes and humans alike.', poster: require("@/assets/images/planetoftheapes.jpeg") },
+          { id: 6, title: 'Hakiyu!! The Dumpster Battle', description: 'Shoyo Hinata joins Karasuno high school has volleyball team to emulate his idol, the Little Giant; but he has to team up with Tobio Kageyama, his former rival.', poster: require("@/assets/images/hakiyuu.jpeg")  }
         ];
       } catch (error) {
         console.error('Error fetching movies:', error);
@@ -104,9 +104,9 @@ export default {
   async fetchFeaturesonScreen(){
     try {
         this.cinemaFeatures = [
-          { id: 1, title: 'IMAX Screens', description: 'Experience movies like never before.', poster: 'imax.jpg' },
-          { id: 2, title: 'Dolby Atmos Sound', description: 'Crystal clear sound quality for an immersive experience.', image: 'dolby-atmos.jpg' },
-          { id: 3, title: 'Luxury Seating', description: 'Relax in our comfortable and luxurious seats.', image: 'luxury-seating.jpg' }
+          { id: 1, title: 'IMAX Screens', description: 'Experience movies like never before.', poster: require("@/assets/images/imax.jpeg") },
+          { id: 2, title: 'Dolby Atmos Sound', description: 'Crystal clear sound quality for an immersive experience.', poster:  require("@/assets/images/dolbyatmos.jpeg")},
+          { id: 3, title: 'Luxury Seating', description: 'Relax in our comfortable and luxurious seats.', image:  require("@/assets/images/luxuryseating.jpeg") }
         ];
       } catch (error) {
         console.error('Error fetching Features:', error);
@@ -154,8 +154,8 @@ export default {
 }
 
 .movie-item img {
-  width: 200px;
-  height: 300px;
+  width: 100%;
+  height: 100%;
   object-fit: cover;
   border-radius: 10px;
 }

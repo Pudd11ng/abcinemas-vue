@@ -130,6 +130,11 @@ export default {
   padding: 0 20px;
 }
 
+main {
+  padding: 20px 0;
+  margin-top: 500px; /* Adjust based on the height of your HeaderPage */
+}
+
 .movies-heading {
   margin: 20px 0 0 0;
   font-size: 24px;

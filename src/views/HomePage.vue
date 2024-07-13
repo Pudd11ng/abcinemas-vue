@@ -132,7 +132,7 @@ export default {
 
 main {
   padding: 20px 0;
-  margin-top: 500px; /* Adjust based on the height of your HeaderPage */
+  margin-top: 700px; /* Adjust based on the height of your HeaderPage */
 }
 
 .movies-heading {
@@ -187,14 +187,16 @@ main {
 }
 
 .movie-item {
-  position: relative;
-  margin: 10px;
   cursor: pointer;
   overflow: hidden;
   border-radius: 10px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   transition: transform 0.3s ease;
   width: 300px;
+  flex: 0 0 auto;
+  margin: 0 10px;
+  text-align: center;
+  position: relative;
 }
 
 .movie-item:hover {

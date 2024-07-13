@@ -111,6 +111,7 @@ export default {
           }
         );
         console.log("Profile updated successfully:", response.data);
+        alert("Profile updated successfully");
         router.push({ path: "/profile" });
       } catch (error) {
         console.error("Error updating user data:", error);

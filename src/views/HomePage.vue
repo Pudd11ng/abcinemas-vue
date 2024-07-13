@@ -146,7 +146,7 @@ export default {
 
 main {
   padding: 20px 0;
-  margin-top: 700px; /* Adjust based on the height of your HeaderPage */
+  margin-top: 800px; /* Adjust based on the height of your HeaderPage */
 }
 
 .movies-heading {
@@ -261,6 +261,7 @@ main {
 
 .movie-list{
   text-align: center;
+  margin-top: 20px; 
 }
 
 .movie-list h3 {
@@ -318,7 +319,7 @@ main {
 .cinema-features h3 {
   font-size: 2em;
   margin-bottom: 20px;
-  color: #333;
+  color: grey;
 }
 
 .features-item {

@@ -71,7 +71,6 @@
               v-model="signInPassword"
               required
             /><br />
-            <a href="#">Forgot your password?</a>
             <button>Sign In</button>
           </form>
         </div>
@@ -189,8 +188,11 @@ export default {
         const userEmail = response.data.email;
         const userRole = response.data.role;
         userStore.setUser(userId, userEmail, userRole);
-        const redirect = this.$route.query.redirect || '/';
-        router.push(redirect);
+        if (userRole == "admin") {
+          router.push({ path: "/admin-user" });
+        } else if (userRole == "user") {
+          router.push({ path: "/" });
+        }
       } catch (error) {
         console.error("Sign in error:", error);
         alert(

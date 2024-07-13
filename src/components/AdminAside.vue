@@ -15,6 +15,13 @@
         <span class="tooltip">User</span>
       </li>
       <li>
+        <router-link to="/admin-bookings" @click="updatePageTitle('Bookings Management')">
+          <i class="bx bx-bookmark"></i>
+          <span class="links_name">Bookings</span>
+        </router-link>
+        <span class="tooltip">Bookings</span>
+      </li>
+      <li>
         <a @click="logout">
           <i class="bx bx-log-out"></i>
           <span class="links_name">Logout</span>

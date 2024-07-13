@@ -243,6 +243,10 @@ main {
   opacity: 1;
 }
 
+.movie-list{
+  text-align: center;
+}
+
 .movie-list h3 {
   font-size: 20px;
   font-weight: bold;
@@ -256,6 +260,7 @@ main {
 .movie-list-item {
   width: calc(50% - 10px); /* Two items per row with 10px spacing */
   margin-bottom: 20px;
+  margin-left: 10px;
 }
 
 .movie-list li router-link {
@@ -272,6 +277,7 @@ main {
   color: #fff;
   border: none;
   padding: 8px 16px;
+  border: none;
   border-radius: 5px;
   cursor: pointer;
   font-size: 14px;

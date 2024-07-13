@@ -19,22 +19,20 @@
                         </option>
                       </select>
                     </div>
-                    <input type="button" name="next-step" class="next-step" value="Continue" :disabled="!selectedMovie"
-                      @click="proceedToBranchSelection" />
+                    <input type="button" name="next-step" class="next-step" value="Continue" :disabled="!selectedMovie" @click="proceedToBranchSelection" />
+                    <input type="button" name="previous-step" class="previous-step" value="Back" @click="goBackToHome" />
                   </div>
                 </fieldset>
                 <fieldset v-if="step === 2">
                   <div id="branch-select-div">
                     <h2>Branch Selection</h2>
                     <div class="branch-selection">
-                      <div class="branch-card" v-for="branch in branches" :key="branch.branch_id"
-                        :class="{ selected: branch.branch_id === selectedBranch }"
-                        @click="selectBranch(branch.branch_id)">
+                      <div class="branch-card" v-for="branch in branches" :key="branch.branch_id" :class="{ selected: branch.branch_id === selectedBranch }" @click="selectBranch(branch.branch_id)">
                         <h3>{{ branch.name }}</h3>
                       </div>
                     </div>
-                    <input type="button" name="next-step" class="next-step" value="Continue" :disabled="!selectedBranch"
-                      @click="proceedToDateSelection" />
+                    <input type="button" name="next-step" class="next-step" value="Continue" :disabled="!selectedBranch" @click="proceedToDateSelection" />
+                    <input type="button" name="previous-step" class="previous-step" value="Back" @click="step = 1" />
                   </div>
                 </fieldset>
                 <fieldset v-if="step === 3">
@@ -43,11 +41,10 @@
                     <div>
                       <p>Selected Movie: <strong>{{ selectedMovieTitle }}</strong></p>
                       <p>Selected Branch: <strong>{{ selectedBranchName }}</strong></p>
-                      <input type="date" v-model="selectedDate" :min="minDate" :max="maxDate"
-                        @change="enableContinueBooking" />
+                      <input type="date" v-model="selectedDate" :min="minDate" :max="maxDate" @change="enableContinueBooking" />
                     </div>
-                    <input id="date-next-btn" type="button" name="next-step" class="next-step" value="Continue Booking"
-                      :disabled="!selectedDate" @click="proceedToShowTimeSelection" />
+                    <input id="date-next-btn" type="button" name="next-step" class="next-step" value="Continue Booking" :disabled="!selectedDate" @click="proceedToShowTimeSelection" />
+                    <input type="button" name="previous-step" class="previous-step" value="Back" @click="step = 2" />
                   </div>
                 </fieldset>
                 <fieldset v-if="step === 4">
@@ -56,16 +53,13 @@
                     <div>
                       <p>Selected Movie: <strong>{{ selectedMovieTitle }}</strong></p>
                       <p>Selected Branch: <strong>{{ selectedBranchName }}</strong></p>
-                      <input type="date" v-model="selectedDate" :min="minDate" :max="maxDate"
-                        @change="fetchShowTimes" />
+                      <input type="date" v-model="selectedDate" :min="minDate" :max="maxDate" @change="fetchShowTimes" />
                     </div>
                     <div v-if="sortedShowTimes && sortedShowTimes.length > 0" class="time-table">
                       <div v-for="(showTime, index) in sortedShowTimes" :key="index" class="time-row">
                         <div class="time-cell">
                           <div class="hall-number">Hall {{ showTime.hall }}</div>
-                          <div class="show-time"
-                            :class="{ selected: selectedHall === showTime.hall && selectedTime === showTime.show_time }"
-                            @click="selectTime(showTime.hall, showTime.show_time)">
+                          <div class="show-time" :class="{ selected: selectedHall === showTime.hall && selectedTime === showTime.show_time }" @click="selectTime(showTime.hall, showTime.show_time)">
                             {{ showTime.show_time }}
                           </div>
                         </div>
@@ -74,10 +68,9 @@
                     <div v-else>
                       <p>No show times available for the selected date.</p>
                     </div>
+                    <input id="showtime-next-btn" type="button" name="next-step" class="next-step" value="Continue Booking" :disabled="!selectedTime || !selectedHall" @click="proceedToTicketSelection" />
+                    <input type="button" name="previous-step" class="previous-step" value="Back" @click="step = 3" />
                   </div>
-                  <input id="showtime-next-btn" type="button" name="next-step" class="next-step"
-                    value="Continue Booking" :disabled="!selectedTime || !selectedHall"
-                    @click="proceedToTicketSelection" />
                 </fieldset>
                 <fieldset v-if="step === 5">
                   <div id="ticket-select-div">
@@ -91,22 +84,17 @@
                       </div>
                     </div>
                     <div class="total-price">Total Price: RM {{ totalPrice }}</div>
-                    <input type="button" name="next-step" class="next-step" value="Continue to Seat Selection"
-                      :disabled="totalTickets === 0" @click="proceedToSeatSelection" />
+                    <input type="button" name="next-step" class="next-step" value="Continue to Seat Selection" :disabled="totalTickets === 0" @click="proceedToSeatSelection" />
+                    <input type="button" name="previous-step" class="previous-step" value="Back" @click="step = 4" />
                   </div>
                 </fieldset>
                 <fieldset v-if="step === 6">
                   <div id="seat-sel-frame" :style="frameStyle">
-                    <SeatSelection @update-total="updateTotal" @select-seat="selectSeat"
-                      :selected-branch="selectedBranchName" :selected-date="selectedDate" :selected-time="selectedTime"
-                      :hall="selectedHall" :max-seats="totalTickets" :selected-movie="selectedMovieTitle"
-                      :ticketTypes="ticketTypes" />
+                    <SeatSelection @update-total="updateTotal" @select-seat="selectSeat" :selected-branch="selectedBranchName" :selected-date="selectedDate" :selected-time="selectedTime" :hall="selectedHall" :max-seats="totalTickets" :selected-movie="selectedMovieTitle" :ticketTypes="ticketTypes" />
                   </div>
                   <br />
-                  <input type="button" name="next-step" class="next-step" value="Proceed to Payment"
-                    @click="validateSeatSelection" />
-                  <input type="button" name="previous-step" class="previous-step" value="Back"
-                    @click="goBackToTicketSelection" />
+                  <input type="button" name="next-step" class="next-step" value="Proceed to Payment" @click="validateSeatSelection" />
+                  <input type="button" name="previous-step" class="previous-step" value="Back" @click="goBackToTicketSelection" />
                 </fieldset>
                 <fieldset v-if="step === 7">
                   <div id="payment_div">
@@ -148,13 +136,11 @@
                             <div class="payment-row">
                               <div class="col-50">
                                 <label for="cname">Cardholder's Name</label>
-                                <input type="text" id="cname" name="cardname" placeholder="Firstname Lastname"
-                                  required />
+                                <input type="text" id="cname" name="cardname" placeholder="Firstname Lastname" required />
                               </div>
                               <div class="col-50">
                                 <label for="ccnum">Credit card number</label>
-                                <input type="text" id="ccnum" name="cardnumber" placeholder="xxxx-xxxx-xxxx-xxxx"
-                                  required />
+                                <input type="text" id="ccnum" name="cardnumber" placeholder="xxxx-xxxx-xxxx-xxxx" required />
                               </div>
                             </div>
                             <div class="payment-row">
@@ -179,16 +165,14 @@
                               <button type="button" @click="confirmCardPayment">Confirm Payment</button>
                             </div>
                           </div>
-                          <div v-else-if="selectedPayment === 'e-wallet' || selectedPayment === 'fpx'"
-                            class="proceed-payment">
+                          <div v-else-if="selectedPayment === 'e-wallet' || selectedPayment === 'fpx'" class="proceed-payment">
                             <button type="button" @click="proceedForPayment">Proceed for Payment</button>
                           </div>
                         </div>
                       </div>
                     </div>
                   </div>
-                  <input type="button" name="previous-step" class="cancel-pay-btn" value="Cancel Payment"
-                    @click="cancelPayment" />
+                  <input type="button" name="previous-step" class="cancel-pay-btn" value="Cancel Payment" @click="cancelPayment" />
                 </fieldset>
               </form>
             </div>
@@ -485,8 +469,10 @@ export default {
           console.error('Error during booking:', error);
           alert('Booking failed: ' + error.message);
         });
+    },
+    goBackToHome() {
+      this.$router.push('/');
     }
-
 
   }
 };

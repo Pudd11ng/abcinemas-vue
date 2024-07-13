@@ -100,7 +100,7 @@
                   >
                 </li>
                 <li>
-                  <router-link class="dropdown-item" to="/profile"
+                  <router-link class="dropdown-item" to="/booking-history"
                     >Booking</router-link
                   >
                 </li>

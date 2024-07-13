@@ -1,6 +1,7 @@
 <template>
   <div id="movielist">
     <HeaderPage />
+    <main>
     <nav>
       <ul>
         <li
@@ -30,6 +31,7 @@
         </div>
       </div>
     </div>
+  </main>
   </div>
 </template>
 
@@ -58,14 +60,22 @@ export default {
           { id: 2, title: "Inside Out 2", poster: "path/to/inside_out_2.jpg" },
           { id: 3, title: "Bad Boys Ride or Die", poster: "path/to/bad_boys_ride_or_die.jpg" },
           { id: 4, title: "I Not Stupid 3", poster: "path/to/i_not_stupid_3.jpg" },
-          { id: 5, title: "Furiosa: A Mad Max Saga", poster:" "},
-          { id: 6, title: "The Garfield Movie", poster:""},
-          { id: 7, title: "Kingdom of the Planet of the Apes", poster:""},
-          { id: 8, title: "Haikyu: The Dumpster Battle!", poster:""},
-          { id: 9, title: "PADU", poster:""},
-          { id: 10, title: "Detective Conan vs Kid the Phantom Thief", poster:""},
-          { id: 11, title: "Twilight of The Warriors: Walled In", poster:""},
-          { id: 12, title: "The Watchers", poster:""}
+          { id: 5, title: "Gold", poster:""},
+          { id: 6, title: "Fly Me to The Moon", poster:""},
+          { id: 7, title: "Indian 2", poster:""},
+          { id: 8, title: "Longlegs", poster:""},
+          { id: 9, title: "Detective Conan: The Million-Dollar Pentagram", poster:""},
+          { id: 10, title: "Twisters", poster:""},
+          { id: 11, title: "Despicable Me 4", poster:""},
+          { id: 12, title: "Customs Frontline", poster:""},
+          { id: 13, title: "A Quiet Place: Day One", poster:""},
+          { id: 14, title: "Crisis Negotiator", poster:""},
+          { id: 15, title: "Kalki 2898 AD(Tamil)", poster:""},
+          { id: 16, title: "Project Silence", poster:""},
+          { id: 17, title: "Welcome to My Side", poster:""},
+          { id: 18, title: "Ipar Adalah Maut", poster:""},
+          { id: 19, title: "Marni: The Story of Wawa Gombel", poster:""},
+          { id: 20, title: "Haunted Universities 3", poster:""},
         ],
         'Advance Sales': [
           { id: 13, title: "The Animal Kingdom", poster: "path/to/avatar_3.jpg" },
@@ -109,6 +119,11 @@ export default {
 </script>
 
 <style scoped>
+main {
+  padding: 20px 0;
+  margin-top: 600px; /* Adjust based on the height of your HeaderPage */
+}
+
 nav ul {
   display: flex;
   justify-content: center;

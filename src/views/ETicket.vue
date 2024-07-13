@@ -4,16 +4,15 @@
     <main>
       <div class="tickets-container">
         <div class="ticket" v-for="(ticket, index) in tickets" :key="index">
-          <div class="holes-top"></div>
-          <div class="title">
+          <div class="ticket-header">
             <p class="cinema">ABCinemas PRESENTS</p>
             <p class="movie-title">{{ ticket.movieTitle }}</p>
           </div>
-          <div class="info">
+          <div class="ticket-body">
             <div class="ticket-info">
               <div class="info-row">
                 <span class="label">BRANCH:</span>
-                <span class="value">{{ ticket.branchName }}</span>
+                <span class="value">{{ ticket.branch }}</span>
               </div>
               <div class="info-row">
                 <span class="label">HALL:</span>
@@ -41,10 +40,6 @@
               </div>
             </div>
           </div>
-          <div class="qr-code">
-            <canvas :ref="`qrcodeCanvas${index}`"></canvas>
-          </div>
-          <div class="holes-lower"></div>
         </div>
       </div>
       <div class="buttons">
@@ -57,7 +52,6 @@
 
 <script>
 import HeaderPage from "@/components/HeaderPage.vue";
-import QRCode from "qrcode";
 import jsPDF from "jspdf";
 
 export default {
@@ -68,7 +62,6 @@ export default {
   data() {
     return {
       tickets: [],
-      movies: {}, // Store movie details with movie_id as key
     };
   },
   mounted() {
@@ -82,51 +75,20 @@ export default {
       fetch(`http://localhost:8088/bookings/${bookingId}`)
         .then(response => response.json())
         .then(data => {
-          const bookingDetails = data.bookingDetails;
-          const movieIds = [...new Set(bookingDetails.map(detail => detail.movie_id))];
-          this.fetchMovieTitles(movieIds)
-            .then(() => {
-              this.tickets = bookingDetails.map(detail => ({
-                movieTitle: this.movies[detail.movie_id],
-                branchName: detail.branch_name,
-                hall: detail.hall,
-                row: detail.seat_row,
-                seat: detail.seat_number,
-                price: detail.price,
-                date: detail.show_date,
-                time: detail.show_time,
-              }));
-              this.generateQRCodes();
-            });
+          this.tickets = data.bookingDetails.map(detail => ({
+            movieTitle: detail.movie_title,
+            branch: detail.branch,
+            hall: detail.hall,
+            row: detail.seat_row,
+            seat: detail.seat_number,
+            price: detail.price,
+            date: detail.show_date,
+            time: detail.show_time,
+          }));
         })
         .catch(error => {
           console.error("Error fetching booking details:", error);
         });
-    },
-    fetchMovieTitles(movieIds) {
-      const promises = movieIds.map(movieId => {
-        return fetch(`http://localhost:8088/movies/${movieId}`)
-          .then(response => response.json())
-          .then(data => {
-            this.$set(this.movies, movieId, data.title);
-          })
-          .catch(error => {
-            console.error(`Error fetching movie details for ID ${movieId}:`, error);
-          });
-      });
-      return Promise.all(promises);
-    },
-    generateQRCodes() {
-      this.tickets.forEach((ticket, index) => {
-        const qrData = `${ticket.movieTitle}-${ticket.branchName}-${ticket.hall}-${ticket.row}-${ticket.seat}-${ticket.date}-${ticket.time}`;
-        const canvas = this.$refs[`qrcodeCanvas${index}`][0]; // Use array index 0 to access the element
-        if (canvas) {
-          QRCode.toCanvas(canvas, qrData, function (error) {
-            if (error) console.error(error);
-            console.log("QR code generated successfully!");
-          });
-        }
-      });
     },
     returnToHome() {
       this.$router.push("/");
@@ -141,19 +103,13 @@ export default {
         pdf.text("ABCinemas PRESENTS", 10, 20);
         pdf.text(ticket.movieTitle, 10, 30);
         pdf.setFontSize(12);
-        pdf.text(`BRANCH: ${ticket.branchName}`, 10, 40);
+        pdf.text(`BRANCH: ${ticket.branch}`, 10, 40);
         pdf.text(`HALL: ${ticket.hall}`, 10, 50);
         pdf.text(`ROW: ${ticket.row}`, 10, 60);
         pdf.text(`SEAT: ${ticket.seat}`, 10, 70);
         pdf.text(`PRICE: RM ${ticket.price}`, 10, 80);
         pdf.text(`DATE: ${ticket.date}`, 10, 90);
         pdf.text(`TIME: ${ticket.time}`, 10, 100);
-
-        const canvas = this.$refs[`qrcodeCanvas${index}`][0]; // Use array index 0 to access the element
-        if (canvas) {
-          const imgData = canvas.toDataURL("image/png");
-          pdf.addImage(imgData, "PNG", 150, 50, 50, 50);
-        }
       });
       pdf.save("e-tickets.pdf");
     },
@@ -166,76 +122,43 @@ export default {
 
 .tickets-container {
   display: flex;
-  flex-wrap: nowrap;
+  flex-wrap: wrap;
   justify-content: space-around;
-  overflow-x: auto;
+  margin-bottom: 20px;
 }
 
 .ticket {
   margin: 10px;
   padding: 10px;
-  border: 1px solid #ddd;
-  border-radius: 5px;
-  width: 300px;
+  border: 2px solid #444;
+  border-radius: 10px;
+  width: 250px;
   box-sizing: border-box;
-  flex: 0 0 auto; /* Prevent shrinking */
+  flex: 0 0 auto;
+  background-color: #f5f5f5;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-.buttons {
-  display: flex;
-  justify-content: space-between;
-  margin-top: 20px;
-}
-
-button {
-  padding: 10px 20px;
-  background-color: #df0e62;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
-
-button:hover {
-  background-color: #c50d56;
-}
-
-button + button {
-  margin-left: 10px;
-}
-
-.holes-top,
-.holes-lower {
-  width: 100%;
-  height: 10px;
-  background: repeating-linear-gradient(
-    -45deg,
-    #fff,
-    #fff 3px,
-    #ddd 3px,
-    #ddd 6px
-  );
-}
-
-.title {
+.ticket-header {
   text-align: center;
-  margin-bottom: 20px;
+  background-color: #333;
+  color: #fff;
+  padding: 10px;
+  border-radius: 10px 10px 0 0;
 }
 
 .cinema {
-  font-size: 14px;
-  color: #666;
+  font-size: 12px;
 }
 
 .movie-title {
-  font-size: 18px;
+  font-size: 16px;
   font-weight: bold;
-  color: #333;
 }
 
-.info {
-  margin-bottom: 20px;
+.ticket-body {
+  padding: 10px;
+  background-color: #fff;
 }
 
 .ticket-info {
@@ -247,20 +170,41 @@ button + button {
 .info-row {
   display: flex;
   justify-content: space-between;
+  padding: 5px 0;
+  border-bottom: 1px solid #ddd;
+}
+
+.info-row:last-child {
+  border-bottom: none;
 }
 
 .label {
   font-weight: bold;
+  color: #444;
 }
 
 .value {
-  font-size: 14px;
+  font-size: 12px;
+  color: #666;
 }
 
-.qr-code {
+.buttons {
   display: flex;
   justify-content: center;
-  align-items: center;
-  margin-top: 20px;
+  gap: 10px;
+}
+
+button {
+  padding: 8px 16px;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+button:hover {
+  background-color: #45a049;
 }
 </style>

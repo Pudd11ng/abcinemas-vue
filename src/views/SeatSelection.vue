@@ -13,6 +13,7 @@
                 <ul class="book-left">
                   <li>Branch:</li>
                   <li>Movie:</li>
+                  <li>Date:</li>
                   <li>Time:</li>
                   <li>Tickets:</li>
                   <li>Ticket Types:</li>
@@ -23,7 +24,8 @@
                 <ul class="book-right">
                   <li>{{ selectedBranch }}</li>
                   <li>{{ selectedMovie }}</li>
-                  <li>{{ selectedDate }}, {{ selectedTime }}</li>
+                  <li>{{ selectedDate }}</li>
+                  <li>{{ selectedTime }}</li>
                   <li>{{ totalTickets }}</li>
                   <li>
                     <ul class="ticket-types">
@@ -71,7 +73,8 @@ export default {
   },
   data() {
     return {
-      selectedSeats: []
+      selectedSeats: [],
+      blockedSeats: []
     };
   },
   computed: {
@@ -118,147 +121,139 @@ export default {
       }
 
       return this.ticketTypes.reduce((acc, ticket) => acc + (ticket.price * ticket.quantity), 0);
-    }
-  },
-  mounted() {
-    const self = this; // Reference to Vue component
-    const seatMaps = {
-      'Hall 1': [
-        'aaaaa_aaaa',
-        'aaaaa_aaaa',
-        'aaaaa_aaaa',
-        'aaaaa_aaaa',
-        'aaaaa_aaaa'
-      ],
-      'Hall 2': [
-        'aaaaa_aaaa',
-        'aaaaa_aaaa',
-        'aaaaa_aaaa',
-        'aaaaa_aaaa'
-      ],
-      'Hall 3': [
-        'aaaaa_aaaa',
-        'aaaaa_aaaa',
-        'aaaaa_aaaa',
-        'aaaaa_aaaa',
-        'aaaaa_aaaa',
-        'aaaaa_aaaa',
-        'aaaaa_aaaa'
-      ],
-      'Hall 4': [
-        'aaaaa_aaaa',
-        'aaaaa_aaaa',
-        'aaaaa_aaaa',
-        'aaaaa_aaaa',
-        'aaaaa_aaaa',
-        'aaaaa_aaaa'
-      ],
-      'Hall 5': [
-        'aaaaa_aaaa',
-        'aaaaa_aaaa',
-        'aaaaa_aaaa',
-        'aaaaa_aaaa',
-        'aaaaa_aaaa'
-      ],
-      'Hall 6': [
-        'aaaaa_aaaa',
-        'aaaaa_aaaa',
-        'aaaaa_aaaa',
-        'aaaaa_aaaa',
-        'aaaaa_aaaa'
-      ]
-    };
-
-    jQuery(document).ready(function () {
-      const $cart = jQuery('#selected-seats'), // Sitting Area
-        $counter = jQuery('#counter'), // Votes
-        $total = jQuery('#total'); // Total money
-
-      const seatMapConfig = seatMaps[self.hall] || seatMaps['Hall 1'];
-
-      if (!seatMapConfig) {
-        console.error('Seat map configuration is missing.');
-        return;
-      }
-
-      const sc = jQuery('#seat-map').seatCharts({
-        map: seatMapConfig,
-        naming: {
-          top: false,
-          getLabel: function (character, row, column) {
-            return column;
+    },
+    fetchBlockedSeats() {
+      fetch(`http://localhost:8088/blocked-seats?branch=${this.selectedBranch}&hall=${this.hall}&show_time=${this.selectedTime}&show_date=${this.selectedDate}`)
+        .then(response => response.json())
+        .then(data => {
+          if (data && data.blockedSeats) {
+            this.blockedSeats = data.blockedSeats.map(seat => `${seat.seat_row}_${seat.seat_number}`);
+            this.initializeSeatMap();
           }
-        },
-        legend: {
-          node: jQuery('#legend'),
-          items: [
-            ['a', 'available', 'Available'],
-            ['a', 'unavailable', 'Sold'],
-            ['a', 'selected', 'Selected']
-          ]
-        },
-        click: function () {
-          if (this.status() === 'available') {
-            if (self.selectedSeats.length < self.maxSeats) {
-              self.selectedSeats.push({ row: this.settings.row + 1, seat: this.settings.label });
+        })
+        .catch(error => console.error('Error fetching blocked seats:', error));
+    },
+    initializeSeatMap() {
+      const self = this;
+      const seatMaps = {
+        'Hall 1': [
+          'aaaaa_aaaa',
+          'aaaaa_aaaa',
+          'aaaaa_aaaa',
+          'aaaaa_aaaa',
+          'aaaaa_aaaa'
+        ],
+        'Hall 2': [
+          'aaaaa_aaaa',
+          'aaaaa_aaaa',
+          'aaaaa_aaaa',
+          'aaaaa_aaaa'
+        ],
+        'Hall 3': [
+          'aaaaa_aaaa',
+          'aaaaa_aaaa',
+          'aaaaa_aaaa',
+          'aaaaa_aaaa',
+          'aaaaa_aaaa',
+          'aaaaa_aaaa',
+          'aaaaa_aaaa'
+        ],
+        'Hall 4': [
+          'aaaaa_aaaa',
+          'aaaaa_aaaa',
+          'aaaaa_aaaa',
+          'aaaaa_aaaa',
+          'aaaaa_aaaa',
+          'aaaaa_aaaa'
+        ],
+        'Hall 5': [
+          'aaaaa_aaaa',
+          'aaaaa_aaaa',
+          'aaaaa_aaaa',
+          'aaaaa_aaaa',
+          'aaaaa_aaaa'
+        ],
+        'Hall 6': [
+          'aaaaa_aaaa',
+          'aaaaa_aaaa',
+          'aaaaa_aaaa',
+          'aaaaa_aaaa',
+          'aaaaa_aaaa'
+        ]
+      };
 
-              jQuery('<div class="seat-card">R' + (this.settings.row + 1) + ' S' + this.settings.label + '</div>')
-                .attr('id', 'cart-item-' + this.settings.id)
-                .data('seatId', this.settings.id)
-                .appendTo($cart);
+      jQuery(document).ready(function () {
+        const $cart = jQuery('#selected-seats'),
+          $counter = jQuery('#counter'),
+          $total = jQuery('#total');
+
+        const seatMapConfig = seatMaps[self.hall] || seatMaps['Hall 1'];
+
+        const sc = jQuery('#seat-map').seatCharts({
+          map: seatMapConfig,
+          naming: {
+            top: false,
+            getLabel: function (character, row, column) {
+              return column;
+            }
+          },
+          legend: {
+            node: jQuery('#legend'),
+            items: [
+              ['a', 'available', 'Available'],
+              ['a', 'unavailable', 'Sold'],
+              ['a', 'selected', 'Selected']
+            ]
+          },
+          click: function () {
+            if (this.status() === 'available') {
+              if (self.selectedSeats.length < self.maxSeats) {
+                self.selectedSeats.push({ row: this.settings.row + 1, seat: this.settings.label });
+
+                jQuery('<div class="seat-card">R' + (this.settings.row + 1) + ' S' + this.settings.label + '</div>')
+                  .attr('id', 'cart-item-' + this.settings.id)
+                  .data('seatId', this.settings.id)
+                  .appendTo($cart);
+
+                $counter.text(self.selectedSeats.length);
+                $total.text(self.totalPrice);
+                self.$emit('update-total', self.totalPrice);
+                self.$emit('select-seat', { row: this.settings.row + 1, seat: this.settings.label });
+
+                return 'selected';
+              } else {
+                alert(`You can only select up to ${self.maxSeats} seats.`);
+                return 'available';
+              }
+            } else if (this.status() === 'selected') {
+              self.selectedSeats = self.selectedSeats.filter(seat => !(seat.row === this.settings.row + 1 && seat.seat === this.settings.label));
 
               $counter.text(self.selectedSeats.length);
               $total.text(self.totalPrice);
-              self.$emit('update-total', self.totalPrice); // Emit the update-total event with the new total
-              self.$emit('select-seat', { row: this.settings.row + 1, seat: this.settings.label }); // Emit the selected seat
+              self.$emit('update-total', self.totalPrice);
 
-              return 'selected';
-            } else {
-              alert(`You can only select up to ${self.maxSeats} seats.`);
+              jQuery('#cart-item-' + this.settings.id).remove();
+
               return 'available';
+            } else if (this.status() === 'unavailable') {
+              return 'unavailable';
+            } else {
+              return this.style();
             }
-          } else if (this.status() === 'selected') {
-            self.selectedSeats = self.selectedSeats.filter(seat => !(seat.row === this.settings.row + 1 && seat.seat === this.settings.label));
-
-            $counter.text(self.selectedSeats.length);
-            $total.text(self.totalPrice);
-            self.$emit('update-total', self.totalPrice); // Emit the update-total event with the new total
-
-            jQuery('#cart-item-' + this.settings.id).remove();
-
-            return 'available';
-          } else if (this.status() === 'unavailable') {
-            return 'unavailable';
-          } else {
-            return this.style();
           }
+        });
+
+        if (self.blockedSeats.length > 0) {
+          sc.get(self.blockedSeats).status('unavailable');
         }
       });
-
-      function makeRandomSeatsUnavailable() {
-        const allSeats = [];
-        for (let row = 0; row < sc.settings.map.length; row++) {
-          for (let col = 0; col < sc.settings.map[row].length; col++) {
-            if (sc.settings.map[row][col] === 'a') {
-              allSeats.push(`${row}_${col + 1}`);
-            }
-          }
-        }
-        const unavailableSeats = allSeats.sort(() => 0.5 - Math.random()).slice(0, Math.floor(allSeats.length * 0.3));
-        sc.get(unavailableSeats).status('unavailable');
-      }
-
-      // Ensure seat chart is initialized before making seats unavailable
-      setTimeout(() => {
-        if (sc && sc.settings && sc.settings.map) {
-          makeRandomSeatsUnavailable();
-        }
-      }, 100); // Delay to ensure the seat chart is initialized
-    });
+    }
+  },
+  mounted() {
+    this.fetchBlockedSeats();
   }
 };
 </script>
-
 
 <style scoped>
 .booking-details {

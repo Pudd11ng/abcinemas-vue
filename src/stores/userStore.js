@@ -6,6 +6,9 @@ export const useUserStore = defineStore("user", {
     userEmail: localStorage.getItem("userEmail") || null,
     userRole: localStorage.getItem("userRole") || null,
   }),
+  getters: {
+    isAuthenticated: (state) => !!state.userId,
+  },
   actions: {
     setUser(userId, userEmail, userRole) {
       this.userId = userId;

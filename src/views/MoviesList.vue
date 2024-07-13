@@ -56,26 +56,26 @@ export default {
       ],
       movies: {
         'Now Showing': [
-          { id: 1, title: "How to Make Millions Before Grandma Dies", poster: "path/to/how_to_make_millions_before_grandma_dies.jpg" },
-          { id: 2, title: "Inside Out 2", poster: "path/to/inside_out_2.jpg" },
-          { id: 3, title: "Bad Boys Ride or Die", poster: "path/to/bad_boys_ride_or_die.jpg" },
-          { id: 4, title: "I Not Stupid 3", poster: "path/to/i_not_stupid_3.jpg" },
-          { id: 5, title: "Gold", poster:""},
-          { id: 6, title: "Fly Me to The Moon", poster:""},
-          { id: 7, title: "Indian 2", poster:""},
-          { id: 8, title: "Longlegs", poster:""},
-          { id: 9, title: "Detective Conan: The Million-Dollar Pentagram", poster:""},
-          { id: 10, title: "Twisters", poster:""},
-          { id: 11, title: "Despicable Me 4", poster:""},
-          { id: 12, title: "Customs Frontline", poster:""},
-          { id: 13, title: "A Quiet Place: Day One", poster:""},
-          { id: 14, title: "Crisis Negotiator", poster:""},
-          { id: 15, title: "Kalki 2898 AD(Tamil)", poster:""},
-          { id: 16, title: "Project Silence", poster:""},
-          { id: 17, title: "Welcome to My Side", poster:""},
-          { id: 18, title: "Ipar Adalah Maut", poster:""},
-          { id: 19, title: "Marni: The Story of Wawa Gombel", poster:""},
-          { id: 20, title: "Haunted Universities 3", poster:""},
+          { id: 1, title: "How to Make Millions Before Grandma Dies", poster: require("@/assets/images/HowToMakeMillions.jpeg") },
+          { id: 2, title: "Inside Out 2", poster: require("@/assets/images/insideout2.jpeg") },
+          { id: 3, title: "Bad Boys Ride or Die", poster: require("@/assets/images/badboys.jpeg") },
+          { id: 4, title: "I Not Stupid 3", poster: require("@/assets/images/inotstupid.jpeg") },
+          { id: 5, title: "Gold", poster: require("@/assets/images/gold.jpeg")},
+          { id: 6, title: "Fly Me to The Moon", poster: require("@/assets/images/flymetothemoon.jpeg")},
+          { id: 7, title: "Indian 2", poster: require("@/assets/images/indian.jpeg")},
+          { id: 8, title: "Longlegs", poster: require("@/assets/images/longlegs.jpeg")},
+          { id: 9, title: "Detective Conan: The Million-Dollar Pentagram", poster: require("@/assets/images/detectiveconan.jpeg")},
+          { id: 10, title: "Twisters", poster: require("@/assets/images/twisters.jpeg")},
+          { id: 11, title: "Despicable Me 4", poster: require("@/assets/images/despicableme.jpeg")},
+          { id: 12, title: "Customs Frontline", poster: require("@/assets/images/customsfrontline.jpeg")},
+          { id: 13, title: "A Quiet Place: Day One", poster: require("@/assets/images/quietplace.jpeg")},
+          { id: 14, title: "Crisis Negotiator", poster: require("@/assets/images/crisis.jpeg")},
+          { id: 15, title: "Kalki 2898 AD(Tamil)", poster: require("@/assets/images/kalki.jpeg")},
+          { id: 16, title: "Project Silence", poster: require("@/assets/images/projectsilence.jpeg")},
+          { id: 17, title: "Welcome to My Side", poster: require("@/assets/images/welcome.jpeg")},
+          { id: 18, title: "Ipar Adalah Maut", poster: require("@/assets/images/ipar.jpeg")},
+          { id: 19, title: "Marni: The Story of Wawa Gombel", poster: require("@/assets/images/marni.jpeg")},
+          { id: 20, title: "Haunted Universities 3", poster: require("@/assets/images/haunteduni.jpeg")},
         ],
         'Advance Sales': [
           { id: 13, title: "The Animal Kingdom", poster: "path/to/avatar_3.jpg" },
@@ -121,7 +121,7 @@ export default {
 <style scoped>
 main {
   padding: 20px 0;
-  margin-top: 600px; /* Adjust based on the height of your HeaderPage */
+  margin-top: 1600px; /* Adjust based on the height of your HeaderPage */
 }
 
 nav ul {

@@ -5,28 +5,6 @@
         <div class="container py-1">
           <div class="text-txt">
             <div class="right-side">
-              <div class="row footer-about">
-                <div class="col-md-3 col-6 footer-img mb-1">
-                  <router-link to="/movies">
-                    <img class="img-fluid" src="assets/images/banner1.jpg" alt="" />
-                  </router-link>
-                </div>
-                <div class="col-md-3 col-6 footer-img mb-1">
-                  <router-link to="/movies">
-                    <img class="img-fluid" src="assets/images/banner2.jpg" alt="" />
-                  </router-link>
-                </div>
-                <div class="col-md-3 col-6 footer-img mb-1">
-                  <router-link to="/movies">
-                    <img class="img-fluid" src="assets/images/banner3.jpg" alt="" />
-                  </router-link>
-                </div>
-                <div class="col-md-3 col-6 footer-img mb-1">
-                  <router-link to="/movies">
-                    <img class="img-fluid" src="assets/images/banner4.jpg" alt="" />
-                  </router-link>
-                </div>
-              </div>
               <div class="row footer-links">
                 <div class="col-md-3 col-sm-6 sub-two-right mt-1">
                   <h6>Movies</h6>
@@ -77,9 +55,6 @@
             <div class="footer-bottom-left d-flex align-items-center">
               <p class="copy-text">&copy; 2024 ABCinemas. All rights reserved. Design by <a href="https://w3layouts.com" target="_blank">W3layouts</a></p>
             </div>
-            <div class="footer-bottom-center d-flex align-items-center">
-              <p>Enter your email and receive the latest news, updates and special offers from us.</p>
-            </div>
             <ul class="social-icons d-flex align-items-center">
               <li><a href="#facebook"><span class="fa fa-facebook"></span></a></li>
               <li><a href="#instagram"><span class="fa fa-instagram"></span></a></li>
@@ -123,35 +98,31 @@ export default {
 @import '../assets/css/style-starter.css';
 
 footer {
-    background-color: #222; /* Background color */
-    color: #fff; /* Text color */
-    font-size: 14px; /* Font size */
-    left: 0;
-    right: 0;
-    text-align: center;
-    padding: 20px 0; /* Add some padding for better spacing */
+  background-color: #222;
+  color: #fff;
+  font-size: 14px;
+  left: 0;
+  right: 0;
+  text-align: center;
+  padding: 10px 0; /* Reduced padding */
 }
 
 .footer-hny-grids {
   padding: 10px 0; /* Adjust padding to reduce height */
 }
 
-.footer-about {
-  margin-bottom: 10px; /* Reduce margin to decrease height */
-}
-
 .footer-links h6 {
-  font-size: 14px; /* Adjust font size to reduce height */
+  font-size: 14px;
   margin-bottom: 10px; /* Reduce margin to decrease height */
 }
 
 .footer-links ul {
-  padding-left: 0; /* Ensure no extra padding */
+  padding-left: 0;
   list-style: none;
 }
 
 .footer-links li {
-  margin-bottom: 5px; /* Reduce margin to decrease height */
+  margin-bottom: 5px;
 }
 
 .footer-links a {
@@ -166,6 +137,7 @@ footer {
 .subscribe {
   display: flex;
   align-items: center;
+  max-height: 100px;
 }
 
 .subscribe input {
@@ -174,6 +146,7 @@ footer {
   padding: 5px;
   font-size: 14px;
   height: auto; /* Ensure the input box height is compact */
+  max-width: 200px; /* Adjust the max-width to make the input box smaller */
 }
 
 .subscribe button {
@@ -186,22 +159,19 @@ footer {
   align-items: center;
   font-size: 12px; /* Reduce font size to decrease height */
   padding: 10px 0; /* Adjust padding to reduce height */
+  flex-wrap: wrap; /* Allow wrapping for better responsiveness */
 }
 
 .footer-bottom-left {
   flex: 1;
 }
 
-.footer-bottom-center {
-  flex: 2;
-  margin-left: 10px;
-}
-
 .social-icons {
   padding: 0;
   list-style: none;
   display: flex;
-  gap: 5px;
+  gap: 10px;
+  padding-right: 10px;
 }
 
 .social-icons li {
@@ -235,9 +205,10 @@ footer {
   background-color: #ff1c6e;
 }
 
-@media (min-width: 1280px) {
-    .container {
-        /* max-width: 1200px; */ /* Commented out or removed */
-    }
+@media (max-width: 768px) {
+  .below-section {
+    flex-direction: column;
+    align-items: center;
+  }
 }
 </style>

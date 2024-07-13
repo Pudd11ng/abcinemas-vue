@@ -87,9 +87,26 @@
             id="login"
             style="font-size: 2rem; display: inline-block; position: relative"
           >
-            <router-link class="nav-link" to="/profile" v-if="userId">
-              <i class="fa fa-user-circle-o"></i>
-            </router-link>
+            <div class="dropup-center" v-if="userId">
+              <i
+                class="fa fa-user-circle-o dropdown-toggle"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+              ></i>
+              <ul class="dropdown-menu">
+                <li>
+                  <router-link class="dropdown-item" to="/profile"
+                    >Profile</router-link
+                  >
+                </li>
+                <li>
+                  <router-link class="dropdown-item" to="/profile"
+                    >Booking</router-link
+                  >
+                </li>
+                <li><a class="dropdown-item" @click="logout">Logout</a></li>
+              </ul>
+            </div>
             <router-link class="nav-link" to="/sign-in" v-else>
               <i class="fa fa-user-circle-o"></i>
             </router-link>
@@ -114,6 +131,7 @@
 </template>
 
 <script>
+import router from "@/router/index.js";
 import { useUserStore } from "@/stores/userStore";
 import { computed } from "vue";
 
@@ -125,9 +143,15 @@ export default {
     const userEmail = computed(() => userStore.userEmail);
     console.log("current user id", userStore.userId);
 
+    const logout = () => {
+      userStore.clearUser();
+      router.push({ path: "/" });
+    };
+
     return {
       userId,
       userEmail,
+      logout,
     };
   },
   mounted() {
@@ -149,5 +173,9 @@ export default {
 
 element.style {
   height: 60px;
+}
+
+.dropdown-item {
+  margin: 0;
 }
 </style>

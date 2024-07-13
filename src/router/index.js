@@ -10,6 +10,7 @@ import TicketBooking from '../views/TicketBooking.vue';
 import SeatSelection from '../views/SeatSelection.vue';
 import AdminUser from '../views/AdminUser.vue';
 import AdminBooking from '../views/AdminBooking.vue';
+import BookingHistory from '../views/BookingHistory.vue';
 import { useUserStore } from '../stores/userStore';
 
 const routes = [
@@ -24,6 +25,7 @@ const routes = [
   { path: '/seat-selection', name: 'SeatSelection', component: SeatSelection, meta: { requiresAuth: true } },
   { path: '/admin-user', name: 'AdminUser', component: AdminUser, meta: { requiresAuth: true } },
   { path: '/admin-bookings', name: 'AdminBooking', component: AdminBooking, meta: { requiresAuth: true } },
+  { path: '/booking-history', name: 'BookingHistory', component: BookingHistory, meta: { requiresAuth: true } },
 ];
 
 const router = createRouter({

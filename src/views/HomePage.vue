@@ -8,7 +8,7 @@
         <div class="carousel-container" ref="carousel">
           <div 
             class="movie-item" 
-            v-for="movie in moviesOnScreen" 
+            v-for="movie in visibleMovies" 
             :key="movie.id" 
             @mouseover="hoverMovie = movie.id" 
             @mouseleave="hoverMovie = null"
@@ -77,12 +77,16 @@ export default {
         { title: 'IMAX Screens', description: 'Experience movies like never before.', poster:  require("@/assets/images/imax.jpeg") },
         { title: 'Dolby Atmos Sound', description: 'Crystal clear sound quality for an immersive experience.', poster:  require("@/assets/images/dolbyatmos.jpeg")},
         { title: 'Luxury Seating', description: 'Relax in our comfortable and luxurious seats.', poster:  require("@/assets/images/luxuryseating.jpeg")},
-        // Add more features as needed
-      ]
+        
+      ],
+      visibleMovies: [], // Will hold the currently visible movies in the carousel
+      currentIndex: 0, // Current index of the carousel
+      itemsPerPage: 3 // Number of items visible per page
     };
   },
   created() {
     this.fetchMoviesOnScreen();
+    this.updateVisibleMovies();
   },
   methods: {
     async fetchMoviesOnScreen() {
@@ -103,6 +107,22 @@ export default {
       } catch (error) {
         console.error('Error fetching movies:', error);
       }
+    },
+    scrollLeft() {
+    if (this.currentIndex > 0) {
+        this.currentIndex--;
+        this.updateVisibleMovies();
+      }
+    },
+    scrollRight() {
+    if (this.currentIndex < this.moviesOnScreen.length - this.itemsPerPage) {
+        this.currentIndex++;
+        this.updateVisibleMovies();
+      }
+    },
+    updateVisibleMovies() {
+      // Update visibleMovies based on currentIndex and itemsPerPage
+      this.visibleMovies = this.moviesOnScreen.slice(this.currentIndex, this.currentIndex + this.itemsPerPage);
     }
   },
   async fetchFeaturesonScreen(){
@@ -115,13 +135,7 @@ export default {
       } catch (error) {
         console.error('Error fetching Features:', error);
       }
-  },
-  scrollLeft() {
-      this.$refs.carousel.scrollBy({ left: -200, behavior: 'smooth' });
-    },
-    scrollRight() {
-      this.$refs.carousel.scrollBy({ left: 200, behavior: 'smooth' });
-    }
+  }
 }
 </script>
 
@@ -132,7 +146,7 @@ export default {
 
 main {
   padding: 20px 0;
-  margin-top: 700px; /* Adjust based on the height of your HeaderPage */
+  margin-top: 800px; /* Adjust based on the height of your HeaderPage */
 }
 
 .movies-heading {
@@ -156,7 +170,7 @@ main {
 
 .carousel-container {
   display: flex;
-  overflow-x: auto;
+  overflow-x: hidden;
   scroll-behavior: smooth;
   gap: 20px;
   padding: 20px;
@@ -247,6 +261,7 @@ main {
 
 .movie-list{
   text-align: center;
+  margin-top: 20px; 
 }
 
 .movie-list h3 {
@@ -304,7 +319,7 @@ main {
 .cinema-features h3 {
   font-size: 2em;
   margin-bottom: 20px;
-  color: #333;
+  color: grey;
 }
 
 .features-item {

@@ -102,8 +102,7 @@
 import HeaderPage from "@/components/HeaderPage.vue";
 import axios from "axios";
 import { useUserStore } from "@/stores/userStore";
-import router from "@/router/index.js";
-import "@/assets/js/theme-change.js";
+import router from "@/router";
 
 export default {
   name: "SignIn",
@@ -190,11 +189,8 @@ export default {
         const userEmail = response.data.email;
         const userRole = response.data.role;
         userStore.setUser(userId, userEmail, userRole);
-        if (userRole == "admin") {
-          router.push({ path: "/admin-user" });
-        } else if (userRole == "user") {
-          router.push({ path: "/" });
-        }
+        const redirect = this.$route.query.redirect || '/';
+        router.push(redirect);
       } catch (error) {
         console.error("Sign in error:", error);
         alert(

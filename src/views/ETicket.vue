@@ -13,7 +13,7 @@
             <div class="ticket-info">
               <div class="info-row">
                 <span class="label">BRANCH:</span>
-                <span class="value">{{ ticket.branch }}</span>
+                <span class="value">{{ ticket.branchName }}</span>
               </div>
               <div class="info-row">
                 <span class="label">HALL:</span>
@@ -42,7 +42,7 @@
             </div>
           </div>
           <div class="qr-code">
-            <canvas :ref="'qrcodeCanvas' + index"></canvas>
+            <canvas :ref="`qrcodeCanvas${index}`"></canvas>
           </div>
           <div class="holes-lower"></div>
         </div>
@@ -68,30 +68,64 @@ export default {
   data() {
     return {
       tickets: [],
+      movies: {}, // Store movie details with movie_id as key
     };
   },
   mounted() {
-    const queryTickets = this.$route.query.tickets;
-    if (queryTickets) {
-      try {
-        this.tickets = JSON.parse(queryTickets);
-        this.$nextTick(() => {
-          this.generateQRCodes();
-        });
-      } catch (error) {
-        console.error("Failed to parse tickets:", error);
-      }
+    const bookingId = this.$route.query.bookingId;
+    if (bookingId) {
+      this.fetchBookingDetails(bookingId);
     }
   },
   methods: {
+    fetchBookingDetails(bookingId) {
+      fetch(`http://localhost:8088/bookings/${bookingId}`)
+        .then(response => response.json())
+        .then(data => {
+          const bookingDetails = data.bookingDetails;
+          const movieIds = [...new Set(bookingDetails.map(detail => detail.movie_id))];
+          this.fetchMovieTitles(movieIds)
+            .then(() => {
+              this.tickets = bookingDetails.map(detail => ({
+                movieTitle: this.movies[detail.movie_id],
+                branchName: detail.branch_name,
+                hall: detail.hall,
+                row: detail.seat_row,
+                seat: detail.seat_number,
+                price: detail.price,
+                date: detail.show_date,
+                time: detail.show_time,
+              }));
+              this.generateQRCodes();
+            });
+        })
+        .catch(error => {
+          console.error("Error fetching booking details:", error);
+        });
+    },
+    fetchMovieTitles(movieIds) {
+      const promises = movieIds.map(movieId => {
+        return fetch(`http://localhost:8088/movies/${movieId}`)
+          .then(response => response.json())
+          .then(data => {
+            this.$set(this.movies, movieId, data.title);
+          })
+          .catch(error => {
+            console.error(`Error fetching movie details for ID ${movieId}:`, error);
+          });
+      });
+      return Promise.all(promises);
+    },
     generateQRCodes() {
       this.tickets.forEach((ticket, index) => {
-        const qrData = `${ticket.movieTitle}-${ticket.branch}-${ticket.hall}-${ticket.row}-${ticket.seat}-${ticket.date}-${ticket.time}`; // Unique data for QR code
-        const canvas = this.$refs["qrcodeCanvas" + index][0]; // Accessing the canvas element
-        QRCode.toCanvas(canvas, qrData, function (error) {
-          if (error) console.error(error);
-          console.log("QR code generated successfully!");
-        });
+        const qrData = `${ticket.movieTitle}-${ticket.branchName}-${ticket.hall}-${ticket.row}-${ticket.seat}-${ticket.date}-${ticket.time}`;
+        const canvas = this.$refs[`qrcodeCanvas${index}`][0]; // Use array index 0 to access the element
+        if (canvas) {
+          QRCode.toCanvas(canvas, qrData, function (error) {
+            if (error) console.error(error);
+            console.log("QR code generated successfully!");
+          });
+        }
       });
     },
     returnToHome() {
@@ -107,7 +141,7 @@ export default {
         pdf.text("ABCinemas PRESENTS", 10, 20);
         pdf.text(ticket.movieTitle, 10, 30);
         pdf.setFontSize(12);
-        pdf.text(`BRANCH: ${ticket.branch}`, 10, 40);
+        pdf.text(`BRANCH: ${ticket.branchName}`, 10, 40);
         pdf.text(`HALL: ${ticket.hall}`, 10, 50);
         pdf.text(`ROW: ${ticket.row}`, 10, 60);
         pdf.text(`SEAT: ${ticket.seat}`, 10, 70);
@@ -115,9 +149,11 @@ export default {
         pdf.text(`DATE: ${ticket.date}`, 10, 90);
         pdf.text(`TIME: ${ticket.time}`, 10, 100);
 
-        const canvas = this.$refs["qrcodeCanvas" + index][0];
-        const imgData = canvas.toDataURL("image/png");
-        pdf.addImage(imgData, "PNG", 150, 50, 50, 50); // Adjust position and size as needed
+        const canvas = this.$refs[`qrcodeCanvas${index}`][0]; // Use array index 0 to access the element
+        if (canvas) {
+          const imgData = canvas.toDataURL("image/png");
+          pdf.addImage(imgData, "PNG", 150, 50, 50, 50);
+        }
       });
       pdf.save("e-tickets.pdf");
     },

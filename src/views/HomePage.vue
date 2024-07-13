@@ -3,20 +3,24 @@
     <HeaderPage />
     <main>
       <h2 class="movies-heading">Movies Currently On Screen</h2>
-      <div class="movies-grid">
-        <div 
-          class="movie-item" 
-          v-for="movie in moviesOnScreen" 
-          :key="movie.id" 
-          @mouseover="hoverMovie = movie.id" 
-          @mouseleave="hoverMovie = null"
-        >
-          <img :src="movie.poster" :alt="movie.title" />
-          <div class="movie-info" v-if="hoverMovie === movie.id">
-            <h3>{{ movie.title }}</h3>
-            <p>{{ movie.description }}</p>
+      <div class="movie-carousel">
+        <button class="carousel-btn left" @click="scrollLeft">&#9664;</button>
+        <div class="carousel-container" ref="carousel">
+          <div 
+            class="movie-item" 
+            v-for="movie in moviesOnScreen" 
+            :key="movie.id" 
+            @mouseover="hoverMovie = movie.id" 
+            @mouseleave="hoverMovie = null"
+          >
+            <img :src="movie.poster" :alt="movie.title" />
+            <div class="movie-info" v-if="hoverMovie === movie.id">
+              <h3>{{ movie.title }}</h3>
+              <p>{{ movie.description }}</p>
+            </div>
           </div>
         </div>
+        <button class="carousel-btn right" @click="scrollRight">&#9654;</button>
       </div>
       <div class="movie-list">
         <h3>Movie List:</h3>
@@ -111,7 +115,13 @@ export default {
       } catch (error) {
         console.error('Error fetching Features:', error);
       }
-  }
+  },
+  scrollLeft() {
+      this.$refs.carousel.scrollBy({ left: -200, behavior: 'smooth' });
+    },
+    scrollRight() {
+      this.$refs.carousel.scrollBy({ left: 200, behavior: 'smooth' });
+    }
 }
 </script>
 
@@ -131,11 +141,44 @@ export default {
   padding: 20px 0;
 }
 
-.movies-grid {
+.movie-carousel {
+  position: relative;
   display: flex;
-  flex-wrap: wrap;
+  align-items: center;
+  margin-bottom: 20px;
+  overflow: hidden;
+}
+
+.carousel-container {
+  display: flex;
+  overflow-x: auto;
+  scroll-behavior: smooth;
   gap: 20px;
-  justify-content: space-between;
+  padding: 20px;
+  flex-grow: 1;
+  width: calc(200px * 3 + 40px * 2); 
+}
+
+.carousel-btn {
+  background-color: rgba(0, 0, 0, 0.5);
+  color: #fff;
+  border: none;
+  padding: 10px;
+  cursor: pointer;
+  font-size: 20px;
+  border-radius: 5px;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 1;
+}
+
+.carousel-btn.left {
+  left: 0;
+}
+
+.carousel-btn.right {
+  right: 0;
 }
 
 .movie-item {
@@ -146,7 +189,7 @@ export default {
   border-radius: 10px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   transition: transform 0.3s ease;
-  width: calc(33.33% - 10px);
+  width: 200px;
 }
 
 .movie-item:hover {

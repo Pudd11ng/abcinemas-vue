@@ -27,6 +27,7 @@
         <p v-if="!isValid" class="error">Invalid phone number</p>
       </div>
       <button @click="saveChanges">Save Changes</button>
+      <button class="logout-btn" @click="returnHome">Cancel</button>
     </div>
   </div>
   <button @click="logout">Logout</button>
@@ -74,6 +75,10 @@ export default {
       router.push({ path: "/" });
     };
 
+    const returnHome = () => {
+      router.push({ path: "/" });
+    };
+
     onMounted(() => {
       getUserData();
     });
@@ -109,9 +114,7 @@ export default {
         router.push({ path: "/profile" });
       } catch (error) {
         console.error("Error updating user data:", error);
-        alert(
-          "User profile update fail. Error: " + error.response.data.error
-        );
+        alert("User profile update fail. Error: " + error.response.data.error);
       }
     };
 
@@ -133,6 +136,7 @@ export default {
       logout,
       saveChanges,
       phoneValidate,
+      returnHome,
     };
   },
 };
@@ -208,5 +212,11 @@ button:focus {
 button.ghost {
   background-color: transparent;
   border-color: #ffffff;
+}
+
+.logout-btn {
+  margin-left: 10px;
+  background-color: #6c6c6c;
+  border-color: #6c6c6c;
 }
 </style>

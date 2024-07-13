@@ -13,7 +13,7 @@
             <div class="ticket-info">
               <div class="info-row">
                 <span class="label">BRANCH:</span>
-                <span class="value">{{ ticket.branch }}</span>
+                <span class="value">{{ ticket.branchName }}</span>
               </div>
               <div class="info-row">
                 <span class="label">HALL:</span>
@@ -88,7 +88,7 @@ export default {
             .then(() => {
               this.tickets = bookingDetails.map(detail => ({
                 movieTitle: this.movies[detail.movie_id],
-                branch: detail.branch_name,
+                branchName: detail.branch_name,
                 hall: detail.hall,
                 row: detail.seat_row,
                 seat: detail.seat_number,
@@ -118,8 +118,8 @@ export default {
     },
     generateQRCodes() {
       this.tickets.forEach((ticket, index) => {
-        const qrData = `${ticket.movieTitle}-${ticket.branch}-${ticket.hall}-${ticket.row}-${ticket.seat}-${ticket.date}-${ticket.time}`;
-        const canvas = this.$refs[`qrcodeCanvas${index}`];
+        const qrData = `${ticket.movieTitle}-${ticket.branchName}-${ticket.hall}-${ticket.row}-${ticket.seat}-${ticket.date}-${ticket.time}`;
+        const canvas = this.$refs[`qrcodeCanvas${index}`][0]; // Use array index 0 to access the element
         if (canvas) {
           QRCode.toCanvas(canvas, qrData, function (error) {
             if (error) console.error(error);
@@ -141,7 +141,7 @@ export default {
         pdf.text("ABCinemas PRESENTS", 10, 20);
         pdf.text(ticket.movieTitle, 10, 30);
         pdf.setFontSize(12);
-        pdf.text(`BRANCH: ${ticket.branch}`, 10, 40);
+        pdf.text(`BRANCH: ${ticket.branchName}`, 10, 40);
         pdf.text(`HALL: ${ticket.hall}`, 10, 50);
         pdf.text(`ROW: ${ticket.row}`, 10, 60);
         pdf.text(`SEAT: ${ticket.seat}`, 10, 70);
@@ -149,7 +149,7 @@ export default {
         pdf.text(`DATE: ${ticket.date}`, 10, 90);
         pdf.text(`TIME: ${ticket.time}`, 10, 100);
 
-        const canvas = this.$refs[`qrcodeCanvas${index}`];
+        const canvas = this.$refs[`qrcodeCanvas${index}`][0]; // Use array index 0 to access the element
         if (canvas) {
           const imgData = canvas.toDataURL("image/png");
           pdf.addImage(imgData, "PNG", 150, 50, 50, 50);

@@ -161,7 +161,7 @@ main {
   gap: 20px;
   padding: 20px;
   flex-grow: 1;
-  width: calc(200px * 3 + 40px * 2); 
+  width: calc(300px * 3 + 40px * 2); 
 }
 
 .carousel-btn {
@@ -194,7 +194,7 @@ main {
   border-radius: 10px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   transition: transform 0.3s ease;
-  width: 200px;
+  width: 300px;
 }
 
 .movie-item:hover {
@@ -203,7 +203,7 @@ main {
 
 .movie-item img {
   width: 100%;
-  height: 100%;
+  height: 400px;
   object-fit: cover;
   border-radius: 10px;
 }

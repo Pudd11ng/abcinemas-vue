@@ -22,6 +22,13 @@
         <span class="tooltip">Bookings</span>
       </li>
       <li>
+        <router-link to="/admin-movies" @click="updatePageTitle('Movies Management')">
+          <i class="bx bx-user"></i>
+          <span class="links_name">Movies</span>
+        </router-link>
+        <span class="tooltip">Movies</span>
+      </li>
+      <li>
         <a @click="logout">
           <i class="bx bx-log-out"></i>
           <span class="links_name">Logout</span>

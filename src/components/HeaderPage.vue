@@ -35,6 +35,8 @@
             <li class="nav-item">
               <router-link class="nav-link" to="/ticket-booking">Booking</router-link>
             </li>
+            <li class="nav-item"><router-link class="nav-link" to="/rating-reviews">Rating & Reviews</router-link>
+            </li>
             <li class="nav-item">
               <router-link class="nav-link" to="/about">About</router-link>
             </li>

@@ -11,6 +11,7 @@ import SeatSelection from '../views/SeatSelection.vue';
 import AdminUser from '../views/AdminUser.vue';
 import AdminBooking from '../views/AdminBooking.vue';
 import BookingHistory from '../views/BookingHistory.vue';
+import RatingReviews from '../views/RatingandReview.vue';
 import { useUserStore } from '../stores/userStore';
 
 const routes = [
@@ -26,6 +27,7 @@ const routes = [
   { path: '/admin-user', name: 'AdminUser', component: AdminUser, meta: { requiresAuth: true } },
   { path: '/admin-bookings', name: 'AdminBooking', component: AdminBooking, meta: { requiresAuth: true } },
   { path: '/booking-history', name: 'BookingHistory', component: BookingHistory, meta: { requiresAuth: true } },
+  { path: '/rating-reviews', name: 'RatingReviews', component: RatingReviews, meta: { requiresAuth: true } },
 ];
 
 const router = createRouter({
@@ -37,7 +39,7 @@ router.beforeEach((to, from, next) => {
   const userStore = useUserStore();
   console.log('User isAuthenticated:', userStore.isAuthenticated);
   if (to.matched.some(record => record.meta.requiresAuth) && !userStore.isAuthenticated) {
-    alert("You must Sign In/Register before booking tickets.");
+    alert("You must Sign In/Register before accessing this section.");
     next({ name: 'SignIn', query: { redirect: to.fullPath } });
   } else {
     next();

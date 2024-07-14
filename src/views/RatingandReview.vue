@@ -1,61 +1,72 @@
 <template>
-  <div id="movielist">
+  <div class="rating-reviews-page">
     <HeaderPage />
     <main>
-      <div class="rating-reviews-page">
-        <h2>Movie List</h2>
-        <div class="movie-selection">
-          <select v-model="selectedMovieId" @change="updateSelectedMovie">
-            <option v-for="movie in movies" :key="movie.id" :value="movie.id">
-              {{ movie.title }}
-            </option>
-          </select>
-        </div>
+      <h2>Movie List</h2>
+      <div class="movie-selection">
+        <select v-model="selectedMovieId" @change="updateSelectedMovie">
+          <option v-for="movie in movies" :key="movie.id" :value="movie.id">
+            {{ movie.title }}
+          </option>
+        </select>
+      </div>
 
-        <div v-if="selectedMovie" class="movie-details">
-          <h3>{{ selectedMovie.title }}</h3>
-          <div class="reviews">
-            <h4>Ratings & Reviews</h4>
-            <ul>
-              <li v-for="review in selectedMovie.reviews" :key="review.review_id">
-                <em>{{ review.rating }}/5</em> - {{ review.review }}
-                <button @click="editReview(review)">Edit</button>
-                <button @click="deleteReview(review.review_id)">Delete</button>
-              </li>
-            </ul>
-            <button @click="toggleReviewForm">{{ isEditing ? 'Cancel Edit' : 'Add Review' }}</button>
-            <div v-if="showReviewForm" class="add-review">
-              <h4>{{ isEditing ? 'Update' : 'Add' }} a Review</h4>
-              <form @submit.prevent="submitReview">
-                <div>
-                  <label for="rating">Rating:</label>
-                  <select id="rating" v-model.number="newReview.rating" required>
-                    <option value="1">1</option>
-                    <option value="2">2</option>
-                    <option value="3">3</option>
-                    <option value="4">4</option>
-                    <option value="5">5</option>
-                  </select>
-                </div>
-                <div>
-                  <label for="review">Review:</label>
-                  <textarea id="review" v-model="newReview.review" required></textarea>
-                </div>
-                <button type="submit">{{ isEditing ? 'Update Review' : 'Submit Review' }}</button>
-              </form>
-            </div>
+      <div v-if="selectedMovie" class="movie-details">
+        <h3>{{ selectedMovie.title }}</h3>
+        <div class="reviews">
+          <h4>Ratings & Reviews</h4>
+          <ul v-if="selectedMovie.reviews && selectedMovie.reviews.length > 0">
+            <li v-for="review in selectedMovie.reviews" :key="review.review_id">
+              <em>{{ review.rating }}/5</em> - {{ review.review }}
+              <button @click="editReview(review)">Edit</button>
+              <button @click="deleteReview(review.review_id)">Delete</button>
+            </li>
+          </ul>
+          <p v-else>No reviews available for this movie.</p>
+          <button @click="toggleReviewForm">
+            {{ isEditing ? "Cancel Edit" : "Add Review" }}
+          </button>
+          <div v-if="showReviewForm" class="add-review">
+            <h4>{{ isEditing ? "Update" : "Add" }} a Review</h4>
+            <form @submit.prevent="submitReview">
+              <div>
+                <label for="rating">Rating:</label>
+                <select id="rating" v-model.number="newReview.rating" required>
+                  <option value="1">1</option>
+                  <option value="2">2</option>
+                  <option value="3">3</option>
+                  <option value="4">4</option>
+                  <option value="5">5</option>
+                </select>
+              </div>
+              <div>
+                <label for="review">Review:</label>
+                <textarea
+                  id="review"
+                  v-model="newReview.review"
+                  required
+                ></textarea>
+              </div>
+              <button type="submit">
+                {{ isEditing ? "Update Review" : "Submit Review" }}
+              </button>
+            </form>
           </div>
         </div>
+      </div>
+      <div v-else>
+        <p>Loading...</p>
       </div>
     </main>
   </div>
 </template>
 
 <script>
-import HeaderPage from '@/components/HeaderPage.vue';
+import axios from "axios";
+import HeaderPage from "@/components/HeaderPage.vue";
 
 export default {
-  name: 'RatingReviewsPage',
+  name: "RatingReviewsPage",
   components: {
     HeaderPage,
   },
@@ -66,67 +77,87 @@ export default {
       selectedMovie: null,
       newReview: {
         rating: null,
-        review: ''
+        review: "",
       },
       showReviewForm: false,
       isEditing: false,
-      editReviewId: null
+      editReviewId: null,
     };
   },
   methods: {
     fetchMovies() {
-      fetch('movies.php')
-        .then(response => response.json())
-        .then(data => {
-          this.movies = data;
-          this.selectedMovieId = this.movies.length > 0 ? this.movies[0].id : null;
+      axios
+        .get("http://localhost:8088/movies")
+        .then((response) => {
+          this.movies = response.data.movies;
+          console.log("Fetched movies:", this.movies);
+          this.selectedMovieId =
+            this.movies.length > 0 ? this.movies[0].id : null;
           this.updateSelectedMovie();
+        })
+        .catch((error) => {
+          console.error("Error fetching movies:", error);
         });
     },
     updateSelectedMovie() {
       if (this.selectedMovieId) {
-        fetch(`rating_reviews.php?movie_id=${this.selectedMovieId}`)
-          .then(response => response.json())
-          .then(data => {
-            this.selectedMovie = this.movies.find(movie => movie.id === this.selectedMovieId);
-            if (this.selectedMovie) {
-              this.selectedMovie.reviews = data;
-            }
+        axios
+          .get(`http://localhost:8088/movies/${this.selectedMovieId}`)
+          .then((response) => {
+            this.selectedMovie = response.data;
+            console.log("Selected movie:", this.selectedMovie);
+          })
+          .catch((error) => {
+            console.error("Error fetching selected movie:", error);
           });
       }
     },
-    submitReview() {
-      const formData = new FormData();
-      formData.append('movieID', this.selectedMovieId);
-      formData.append('rating', this.newReview.rating);
-      formData.append('review', this.newReview.review);
+    async submitReview() {
+      try {
+        const { selectedMovieId, newReview, isEditing, editReviewId } = this;
+        const reviewData = {
+          movieID: selectedMovieId,
+          rating: newReview.rating,
+          review: newReview.review,
+        };
 
-      if (this.isEditing) {
-        formData.append('review_id', this.editReviewId);
+        console.log(reviewData);
 
-        fetch('rating_reviews.php', {
-          method: 'PUT',
-          body: formData
-        })
-        .then(response => response.text())
-        .then(data => {
-          console.log(data);
-          this.updateSelectedMovie();  // Refresh the reviews list
-          this.resetForm();
-        });
-      } else {
-        fetch('rating_reviews.php', {
-          method: 'POST',
-          body: formData
-        })
-        .then(response => response.text())
-        .then(data => {
-          console.log(data);
-          this.updateSelectedMovie();  // Refresh the reviews list
-          this.resetForm();
-        });
+        let response;
+        if (isEditing) {
+          response = await axios.put(
+            `http://localhost:8088/reviews/${editReviewId}`,
+            {
+              movieID: selectedMovieId,
+              rating: newReview.rating,
+              review: newReview.review,
+            }
+          );
+          console.log("Review updated successfully:", response.data);
+        } else {
+          response = await axios.post(
+            "http://localhost:8088/reviews",
+            reviewData
+          );
+          console.log("Review added successfully:", response.data);
+        }
+
+        this.updateSelectedMovie(); // Refresh the reviews list
+        this.resetForm();
+      } catch (error) {
+        console.error("Error submitting review:", error);
+        if (
+          error.response &&
+          error.response.data &&
+          error.response.data.error
+        ) {
+          alert("Failed to submit review. Error: " + error.response.data.error);
+        } else {
+          alert("Failed to submit review. Unknown error occurred.");
+        }
       }
     },
+
     editReview(review) {
       this.newReview.rating = review.rating;
       this.newReview.review = review.review;
@@ -135,14 +166,15 @@ export default {
       this.showReviewForm = true;
     },
     deleteReview(reviewId) {
-      fetch(`rating_reviews.php?review_id=${reviewId}`, {
-        method: 'DELETE'
-      })
-      .then(response => response.text())
-      .then(data => {
-        console.log(data);
-        this.updateSelectedMovie();  // Refresh the reviews list
-      });
+      axios
+        .delete(`http://localhost:8088/reviews/${reviewId}`)
+        .then((response) => {
+          console.log("Review deleted successfully:", response.data);
+          this.updateSelectedMovie(); // Refresh the reviews list
+        })
+        .catch((error) => {
+          console.error("Error deleting review:", error);
+        });
     },
     toggleReviewForm() {
       this.showReviewForm = !this.showReviewForm;
@@ -151,14 +183,14 @@ export default {
       }
     },
     resetForm() {
-      this.newReview = { rating: null, review: '' };
+      this.newReview = { rating: null, review: "" };
       this.isEditing = false;
       this.editReviewId = null;
-    }
+    },
   },
   mounted() {
     this.fetchMovies();
-  }
+  },
 };
 </script>
 

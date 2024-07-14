@@ -17,8 +17,7 @@
                 <th>Hall</th>
                 <th>Show Time</th>
                 <th>Show Date</th>
-                <th>Seat Row</th>
-                <th>Seat Number</th>
+                <th class="seats-column">Seats</th>
                 <th>Price</th>
               </tr>
             </thead>
@@ -30,8 +29,7 @@
                 <td>{{ booking.hall }}</td>
                 <td>{{ booking.show_time }}</td>
                 <td>{{ booking.show_date }}</td>
-                <td>{{ booking.seat_row }}</td>
-                <td>{{ booking.seat_number }}</td>
+                <td class="seats-column">{{ booking.seats.join(", ") }}</td>
                 <td>{{ booking.price }}</td>
               </tr>
             </tbody>
@@ -67,13 +65,25 @@ export default {
     const loading = ref(false);
     const error = ref("");
 
+    const groupSeatsByBookingId = (data) => {
+      const groupedBookings = data.reduce((acc, booking) => {
+        const { booking_id, seat_row, seat_number, ...rest } = booking;
+        if (!acc[booking_id]) {
+          acc[booking_id] = { ...rest, booking_id, seats: [] };
+        }
+        acc[booking_id].seats.push(`R${seat_row}S${seat_number}`);
+        return acc;
+      }, {});
+      return Object.values(groupedBookings);
+    };
+
     const fetchBookingHistory = async (userId) => {
       loading.value = true;
       try {
         const response = await axios.get(
           `http://localhost:8088/users/bookings/${userId}`
         );
-        bookings.value = response.data.bookingDetails;
+        bookings.value = groupSeatsByBookingId(response.data.bookingDetails);
         error.value = "";
       } catch (error) {
         console.error("Error fetching booking history:", error);
@@ -101,8 +111,8 @@ export default {
 </script>
 
 <style scoped>
-.booking-title{
-    margin: 20px 0 20px 0;
+.booking-title {
+  margin: 20px 0 20px 0;
 }
 
 .booking-content {
@@ -157,5 +167,11 @@ export default {
 
 .styled-table tbody tr:last-of-type {
   border-bottom: 2px solid #212529;
+}
+
+.seats-column {
+  max-width: 150px;
+  word-wrap: break-word;
+  white-space: pre-wrap;
 }
 </style>

@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import Home from '../views/HomePage.vue';
+import AdminMovie from '../views/AdminMovie.vue';
 import ContactUs from '../views/ContactUs.vue';
 import About from '../views/AboutUs.vue';
 import ETicket from '../views/ETicket.vue';
@@ -16,6 +17,7 @@ import { useUserStore } from '../stores/userStore';
 
 const routes = [
   { path: '/', name: 'Home', component: Home },
+  { path: '/admin-movies', name:'AdminMovie', component: AdminMovie, meta: { requiresAuth: true} },
   { path: '/contact-us', name: 'ContactUs', component: ContactUs },
   { path: '/about', name: 'About', component: About },
   { path: '/e-ticket', name: 'ETicket', component: ETicket, props: route => route.params },

@@ -268,213 +268,218 @@ export default {
     this.fetchBranches();
   },
   methods: {
-    fetchMovies() {
-      console.log('Fetching movies...');
-      fetch('http://localhost:8088/movies')
-        .then(response => {
-          console.log('Received response:', response);
-          return response.json();
-        })
-        .then(data => {
-          console.log('Data received:', data);
-          this.movies = data.movies;
-        })
-        .catch(error => {
-          console.error('Error fetching movies:', error);
-        });
-    },
-    fetchBranches() {
-      console.log('Fetching branches...');
-      fetch('http://localhost:8088/branches')
-        .then(response => {
-          console.log('Received response:', response);
-          return response.json();
-        })
-        .then(data => {
-          console.log('Data received:', data);
-          this.branches = data.branches;
-        })
-        .catch(error => {
-          console.error('Error fetching branches:', error);
-        });
-    },
-    fetchShowTimes() {
-      const movieTitle = this.movies.find(movie => movie.id === this.selectedMovie).title;
-      const branchName = this.branches.find(branch => branch.branch_id === this.selectedBranch).name;
-      console.log(`Fetching showtimes for movie: ${movieTitle}, branch: ${branchName}, date: ${this.selectedDate}`);
-      fetch(`http://localhost:8088/showtimes?movie=${movieTitle}&branch=${branchName}&date=${this.selectedDate}`)
-        .then(response => {
-          console.log('Received response:', response);
-          return response.json();
-        })
-        .then(data => {
-          console.log('Data received:', data);
-          this.showTimes = data.showTimes;
-        })
-        .catch(error => {
-          console.error('Error fetching show times:', error);
-        });
-    },
-    selectMovie(movieId) {
-      this.selectedMovie = movieId;
-    },
-    selectBranch(branchId) {
-      this.selectedBranch = branchId;
-    },
-    enableContinueBooking() {
-      console.log(`Selected Date: ${this.selectedDate}`);
-    },
-    selectTime(hall, time) {
-      console.log(`Selected Hall: ${hall}, Selected Time: ${time}`);
-      this.selectedHall = hall;
-      this.selectedTime = time;
-    },
-    proceedToBranchSelection() {
-      this.step = 2;
-    },
-    proceedToDateSelection() {
-      this.step = 3;
-    },
-    proceedToShowTimeSelection() {
-      this.fetchShowTimes(); // Fetch show times when proceeding to the show time selection step
-      this.step = 4;
-    },
-    proceedToTicketSelection() {
-      console.log('Proceeding to ticket selection');
-      console.log(`Selected Time: ${this.selectedTime}, Selected Hall: ${this.selectedHall}`);
-      if (!this.selectedTime || !this.selectedHall) {
-        alert('Please select a show time and hall.');
-        return;
-      }
-      this.step = 5;
-    },
-    proceedToSeatSelection() {
-      if (this.totalTickets > 0 && this.totalTickets <= 6) {
-        this.step = 6;
-      } else {
-        alert('You can select at most 6 tickets.');
-      }
-    },
-    validateSeatSelection() {
-      if (this.selectedSeats.length !== this.totalTickets) {
-        alert(`You have selected ${this.selectedSeats.length} seats, but you need to select ${this.totalTickets} seats.`);
-      } else {
-        this.proceedToPayment();
-      }
-    },
-    proceedToPayment() {
-      this.step = 7;
-    },
-    goBackToTicketSelection() {
-      this.step = 5;
-    },
-    cancelPayment() {
-      this.$router.push('/');
-    },
-    updateTotal(total) {
-      this.totalPrice = total;
-    },
-    updateTicketPrices() {
-      const selectedDay = new Date(this.selectedDate).getDay();
-      const selectedTime = this.selectedTime;
-      const isAfter6pm = selectedTime >= '18:00';
-
-      this.ticketTypes.forEach(ticket => {
-        if (selectedDay === 3 && !isAfter6pm) { // Wednesday before 6pm
-          if (ticket.name === 'adult' || ticket.name === 'student') {
-            ticket.price = 14;
-          } else {
-            ticket.price = ticket.name === 'child' ? 11 : 11;
-          }
-        } else if (isAfter6pm) { // After 6pm
-          ticket.price = ticket.name === 'adult' ? 22 :
-            ticket.name === 'child' ? 16 :
-              ticket.name === 'student' ? 18 : 16;
-        } else { // Regular pricing
-          ticket.price = ticket.name === 'adult' ? 16 :
-            ticket.name === 'child' ? 11 :
-              ticket.name === 'student' ? 14 : 11;
-        }
-      });
-
-      this.updateTotalPrice();
-    },
-    updateTotalPrice() {
-      this.totalPrice = this.ticketTypes.reduce((acc, ticket) => acc + (ticket.quantity * ticket.price), 0);
-    },
-    selectSeat(seat) {
-      if (this.selectedSeats.length < this.totalTickets) {
-        this.selectedSeats.push(seat);
-      } else {
-        alert(`You can only select up to ${this.totalTickets} seats.`);
-      }
-    },
-    proceedForPayment() {
-      this.createBooking();
-    },
-    confirmCardPayment() {
-      this.createBooking();
-    },
-    createBooking() {
-      const userStore = useUserStore();
-      const bookingData = {
-        user_id: userStore.userId, // Using userStore to get the logged-in user's ID
-        movie_id: this.selectedMovie, // Use selectedMovie (ID) here
-        branch: this.selectedBranchName,
-        hall: this.selectedHall,
-        show_date: this.selectedDate,
-        show_time: this.selectedTime,
-        total_price: this.totalPrice,
-        payment_method: this.selectedPayment,
-        seats: []
-      };
-
-      this.selectedSeats.forEach(seat => {
-        // Find the ticket type and price for each seat
-        const ticketType = this.ticketTypes.find(type => type.quantity > 0);
-        if (ticketType) {
-          bookingData.seats.push({
-            row: seat.row,
-            seat: seat.seat,
-            ticket_type: ticketType.label,
-            price: ticketType.price
-          });
-          ticketType.quantity--; // Decrease the quantity to handle multiple seat selections
-        }
-      });
-
-      fetch('http://localhost:8088/bookings', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(bookingData)
+  fetchMovies() {
+    console.log('Fetching movies...');
+    fetch('http://localhost:8088/movies')
+      .then(response => {
+        console.log('Received response:', response);
+        return response.json();
       })
-        .then(response => {
-          if (!response.ok) {
-            throw new Error(`Failed to fetch (bookings)`);
-          }
-          return response.json();
-        })
-        .then(data => {
-          if (data.success) {
-            alert('Booking confirmed!');
-            const bookingId = data.booking_id;
-            this.$router.push({ name: 'ETicket', query: { bookingId } });
-          } else {
-            alert('Booking failed: ' + data.error);
-          }
-        })
-        .catch(error => {
-          console.error('Error during booking:', error);
-          alert('Booking failed: ' + error.message);
-        });
-    },
-    goBackToHome() {
-      this.$router.push('/');
+      .then(data => {
+        console.log('Data received:', data);
+        this.movies = data.movies;
+      })
+      .catch(error => {
+        console.error('Error fetching movies:', error);
+      });
+  },
+  fetchBranches() {
+    console.log('Fetching branches...');
+    fetch('http://localhost:8088/branches')
+      .then(response => {
+        console.log('Received response:', response);
+        return response.json();
+      })
+      .then(data => {
+        console.log('Data received:', data);
+        this.branches = data.branches;
+      })
+      .catch(error => {
+        console.error('Error fetching branches:', error);
+      });
+  },
+  fetchShowTimes() {
+    const movieTitle = this.movies.find(movie => movie.id === this.selectedMovie).title;
+    const branchName = this.branches.find(branch => branch.branch_id === this.selectedBranch).name;
+    console.log(`Fetching showtimes for movie: ${movieTitle}, branch: ${branchName}, date: ${this.selectedDate}`);
+    fetch(`http://localhost:8088/showtimes?movie=${movieTitle}&branch=${branchName}&date=${this.selectedDate}`)
+      .then(response => {
+        console.log('Received response:', response);
+        return response.json();
+      })
+      .then(data => {
+        console.log('Data received:', data);
+        this.showTimes = data.showTimes;
+      })
+      .catch(error => {
+        console.error('Error fetching show times:', error);
+      });
+  },
+  selectMovie(movieId) {
+    this.selectedMovie = movieId;
+  },
+  selectBranch(branchId) {
+    this.selectedBranch = branchId;
+  },
+  enableContinueBooking() {
+    console.log(`Selected Date: ${this.selectedDate}`);
+  },
+  selectTime(hall, time) {
+    console.log(`Selected Hall: ${hall}, Selected Time: ${time}`);
+    this.selectedHall = hall;
+    this.selectedTime = time;
+  },
+  proceedToBranchSelection() {
+    this.step = 2;
+  },
+  proceedToDateSelection() {
+    this.step = 3;
+  },
+  proceedToShowTimeSelection() {
+    this.fetchShowTimes();
+    this.step = 4;
+  },
+  proceedToTicketSelection() {
+    console.log('Proceeding to ticket selection');
+    console.log(`Selected Time: ${this.selectedTime}, Selected Hall: ${this.selectedHall}`);
+    if (!this.selectedTime || !this.selectedHall) {
+      alert('Please select a show time and hall.');
+      return;
+    }
+    this.step = 5;
+  },
+  proceedToSeatSelection() {
+    if (this.totalTickets > 0 && this.totalTickets <= 6) {
+      this.step = 6;
+    } else {
+      alert('You can select at most 6 tickets.');
+    }
+  },
+  validateSeatSelection() {
+    if (this.selectedSeats.length !== this.totalTickets) {
+      alert(`You have selected ${this.selectedSeats.length} seats, but you need to select ${this.totalTickets} seats.`);
+    } else {
+      this.proceedToPayment();
+    }
+  },
+  proceedToPayment() {
+    this.step = 7;
+  },
+  goBackToTicketSelection() {
+    this.step = 5;
+  },
+  cancelPayment() {
+    this.$router.push('/');
+  },
+  updateTotal(total) {
+    this.totalPrice = total;
+  },
+  updateTicketPrices() {
+    const selectedDay = new Date(this.selectedDate).getDay();
+    const selectedTime = this.selectedTime;
+    const isAfter6pm = selectedTime >= '18:00';
+
+    this.ticketTypes.forEach(ticket => {
+      if (selectedDay === 3 && !isAfter6pm) { // Wednesday before 6pm
+        if (ticket.name === 'adult' || ticket.name === 'student') {
+          ticket.price = 14;
+        } else {
+          ticket.price = ticket.name === 'child' ? 11 : 11;
+        }
+      } else if (isAfter6pm) { // After 6pm
+        ticket.price = ticket.name === 'adult' ? 22 :
+          ticket.name === 'child' ? 16 :
+            ticket.name === 'student' ? 18 : 16;
+      } else { // Regular pricing
+        ticket.price = ticket.name === 'adult' ? 16 :
+          ticket.name === 'child' ? 11 :
+            ticket.name === 'student' ? 14 : 11;
+      }
+    });
+
+    this.updateTotalPrice();
+  },
+  updateTotalPrice() {
+    this.totalPrice = this.ticketTypes.reduce((acc, ticket) => acc + (ticket.quantity * ticket.price), 0);
+  },
+  selectSeat(seat) {
+    const seatIndex = this.selectedSeats.findIndex(s => s.row === seat.row && s.seat === seat.seat);
+
+    if (seatIndex !== -1) {
+      this.selectedSeats.splice(seatIndex, 1);
+    } else if (this.selectedSeats.length < this.totalTickets) {
+      this.selectedSeats.push(seat);
+    } else {
+      this.selectedSeats[this.selectedSeats.length - 1] = seat;
     }
 
+    console.log(`Selected seats: ${JSON.stringify(this.selectedSeats)}`);
+  },
+  proceedForPayment() {
+    this.createBooking();
+  },
+  confirmCardPayment() {
+    this.createBooking();
+  },
+  createBooking() {
+    const userStore = useUserStore();
+    const bookingData = {
+      user_id: userStore.userId,
+      movie_id: this.selectedMovie,
+      branch: this.selectedBranchName,
+      hall: this.selectedHall,
+      show_date: this.selectedDate,
+      show_time: this.selectedTime,
+      total_price: this.totalPrice,
+      payment_method: this.selectedPayment,
+      seats: []
+    };
+
+    this.selectedSeats.forEach(seat => {
+      const ticketType = this.ticketTypes.find(type => type.quantity > 0);
+      if (ticketType) {
+        bookingData.seats.push({
+          row: seat.row,
+          seat: seat.seat,
+          ticket_type: ticketType.label,
+          price: ticketType.price
+        });
+        ticketType.quantity--;
+      }
+    });
+
+    fetch('http://localhost:8088/bookings', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(bookingData)
+    })
+      .then(response => {
+        if (!response.ok) {
+          throw new Error(`Failed to fetch (bookings)`);
+        }
+        return response.json();
+      })
+      .then(data => {
+        if (data.success) {
+          alert('Booking confirmed!');
+          const bookingId = data.booking_id;
+          this.$router.push({ name: 'ETicket', query: { bookingId } });
+        } else {
+          alert('Booking failed: ' + data.error);
+        }
+      })
+      .catch(error => {
+        console.error('Error during booking:', error);
+        alert('Booking failed: ' + error.message);
+      });
+  },
+  goBackToHome() {
+    this.$router.push('/');
   }
+}
+
 };
 </script>
 

@@ -59,7 +59,7 @@ The application is configured to connect to the backend API at:
 http://localhost:8088/api
 ```
 
-All API endpoints are properly configured with the `/api` prefix and use the correct request formats as documented in the [Backend API Documentation](https://github.com/Pudd11ng/drivesense-backend).
+All API endpoints are properly configured with the `/api` prefix and use the correct request formats as documented in the [Backend API Documentation](https://github.com/Pudd11ng/abcinemas-backend).
 
 
 ## 🔗 API Integration
@@ -67,7 +67,7 @@ All API endpoints are properly configured with the `/api` prefix and use the cor
 ### Backend Integration
 
 This frontend is designed to work with the ABC Cinemas Backend API:
-- **Repository**: [https://github.com/Pudd11ng/drivesense-backend](https://github.com/Pudd11ng/drivesense-backend)
+- **Repository**: [https://github.com/Pudd11ng/abcinemas-backend](https://github.com/Pudd11ng/abcinemas-backend)
 - **Documentation**: See backend repository for complete API documentation
 
 ### API Endpoints Used

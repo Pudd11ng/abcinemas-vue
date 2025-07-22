@@ -123,7 +123,7 @@ export default {
       return this.ticketTypes.reduce((acc, ticket) => acc + (ticket.price * ticket.quantity), 0);
     },
     fetchBlockedSeats() {
-      fetch(`http://localhost:8088/blocked-seats?branch=${this.selectedBranch}&hall=${this.hall}&show_time=${this.selectedTime}&show_date=${this.selectedDate}`)
+      fetch(`http://localhost:8088/api/blocked-seats?branch=${this.selectedBranch}&hall=${this.hall}&show_time=${this.selectedTime}&show_date=${this.selectedDate}`)
         .then(response => response.json())
         .then(data => {
           if (data && data.blockedSeats) {

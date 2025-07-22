@@ -267,10 +267,9 @@ export default {
     this.fetchMovies();
     this.fetchBranches();
   },
-  methods: {
-  fetchMovies() {
+  methods: {  fetchMovies() {
     console.log('Fetching movies...');
-    fetch('http://localhost:8088/movies')
+    fetch('http://localhost:8088/api/movies')
       .then(response => {
         console.log('Received response:', response);
         return response.json();
@@ -282,10 +281,9 @@ export default {
       .catch(error => {
         console.error('Error fetching movies:', error);
       });
-  },
-  fetchBranches() {
+  },  fetchBranches() {
     console.log('Fetching branches...');
-    fetch('http://localhost:8088/branches')
+    fetch('http://localhost:8088/api/branches')
       .then(response => {
         console.log('Received response:', response);
         return response.json();
@@ -302,7 +300,7 @@ export default {
     const movieTitle = this.movies.find(movie => movie.id === this.selectedMovie).title;
     const branchName = this.branches.find(branch => branch.branch_id === this.selectedBranch).name;
     console.log(`Fetching showtimes for movie: ${movieTitle}, branch: ${branchName}, date: ${this.selectedDate}`);
-    fetch(`http://localhost:8088/showtimes?movie=${movieTitle}&branch=${branchName}&date=${this.selectedDate}`)
+    fetch(`http://localhost:8088/api/booking-showtimes?movie=${movieTitle}&branch=${branchName}&date=${this.selectedDate}`)
       .then(response => {
         console.log('Received response:', response);
         return response.json();
@@ -448,7 +446,7 @@ export default {
       }
     });
 
-    fetch('http://localhost:8088/bookings', {
+    fetch('http://localhost:8088/api/bookings', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'

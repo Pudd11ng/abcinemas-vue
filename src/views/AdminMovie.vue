@@ -134,7 +134,7 @@ export default {
       if (this.searchTerm) params.append("search", this.searchTerm);
 
       axios
-        .get(`http://localhost:8088/movies`, { params })
+        .get(`http://localhost:8088/api/movies`, { params })
         .then((response) => {
           console.log("Movies fetched:", response.data.movies); // Add this line
           this.movies = response.data.movies;
@@ -161,7 +161,7 @@ export default {
     },
     deleteMovie(id) {
       axios
-        .delete(`http://localhost:8088/movies/${id}`)
+        .delete(`http://localhost:8088/api/movies/${id}`)
         .then((response) => {
           this.fetchMovies();
           alert("Movie deleted successfully.");
@@ -185,7 +185,7 @@ export default {
     },
     addMovie() {
       axios
-        .post(`http://localhost:8088/movies`, this.newMovie)
+        .post(`http://localhost:8088/api/movies`, this.newMovie)
         .then((response) => {
           this.fetchMovies();
           this.closeAddModal();
@@ -206,7 +206,7 @@ export default {
     },
     updateMovie() {
       axios
-        .put(`http://localhost:8088/movies/${this.selectedMovie.id}`, this.selectedMovie)
+        .put(`http://localhost:8088/api/movies/${this.selectedMovie.id}`, this.selectedMovie)
         .then((response) => {
           this.fetchMovies();
           this.closeUpdateModal();

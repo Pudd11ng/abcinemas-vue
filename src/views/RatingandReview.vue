@@ -87,7 +87,7 @@ export default {
   methods: {
     fetchMovies() {
       axios
-        .get("http://localhost:8088/movies")
+        .get("http://localhost:8088/api/movies")
         .then((response) => {
           this.movies = response.data.movies;
           console.log("Fetched movies:", this.movies);
@@ -102,7 +102,7 @@ export default {
     updateSelectedMovie() {
       if (this.selectedMovieId) {
         axios
-          .get(`http://localhost:8088/movies/${this.selectedMovieId}`)
+          .get(`http://localhost:8088/api/movies/${this.selectedMovieId}`)
           .then((response) => {
             this.selectedMovie = response.data;
             console.log("Selected movie:", this.selectedMovie);
@@ -111,33 +111,42 @@ export default {
             console.error("Error fetching selected movie:", error);
           });
       }
-    },
-    async submitReview() {
+    },    async submitReview() {
       try {
         const { selectedMovieId, newReview, isEditing, editReviewId } = this;
-        const reviewData = {
-          movieID: selectedMovieId,
-          rating: newReview.rating,
-          review: newReview.review,
-        };
-
-        console.log(reviewData);
 
         let response;
         if (isEditing) {
+          // Create form data for update
+          const formData = new URLSearchParams();
+          formData.append('rating', newReview.rating);
+          formData.append('review', newReview.review);
+
           response = await axios.put(
-            `http://localhost:8088/reviews/${editReviewId}`,
+            `http://localhost:8088/api/reviews/${editReviewId}`,
+            formData,
             {
-              movieID: selectedMovieId,
-              rating: newReview.rating,
-              review: newReview.review,
+              headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+              }
             }
           );
           console.log("Review updated successfully:", response.data);
         } else {
+          // Create form data for new review
+          const formData = new URLSearchParams();
+          formData.append('movieID', selectedMovieId);
+          formData.append('rating', newReview.rating);
+          formData.append('review', newReview.review);
+
           response = await axios.post(
-            "http://localhost:8088/reviews",
-            reviewData
+            "http://localhost:8088/api/reviews",
+            formData,
+            {
+              headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+              }
+            }
           );
           console.log("Review added successfully:", response.data);
         }
@@ -167,7 +176,7 @@ export default {
     },
     deleteReview(reviewId) {
       axios
-        .delete(`http://localhost:8088/reviews/${reviewId}`)
+        .delete(`http://localhost:8088/api/reviews/${reviewId}`)
         .then((response) => {
           console.log("Review deleted successfully:", response.data);
           this.updateSelectedMovie(); // Refresh the reviews list

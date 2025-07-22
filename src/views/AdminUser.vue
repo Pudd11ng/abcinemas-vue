@@ -133,12 +133,16 @@ export default {
       );
     },
   },
-  methods: {
-    fetchUsers() {
+  methods: {    fetchUsers() {
       axios
-        .get("http://localhost:8088/users")
+        .get("http://localhost:8088/api/users")
         .then((response) => {
-          this.users = response.data;
+          if (response.data.success) {
+            this.users = response.data.data;
+          } else {
+            this.users = [];
+            console.error("Error in API response:", response.data.error);
+          }
           this.updateChart();
         })
         .catch((error) => {
@@ -168,7 +172,7 @@ export default {
     },
     deleteUser(userId) {
       axios
-        .delete(`http://localhost:8088/users/${userId}`)
+        .delete(`http://localhost:8088/api/users/${userId}`)
         .then((response) => {
           this.fetchUsers();
           alert("User deleted successfully.");

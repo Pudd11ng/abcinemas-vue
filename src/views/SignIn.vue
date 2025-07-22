@@ -152,52 +152,72 @@ export default {
       } else if (!this.isValid) {
         alert("Invalid phone number.");
         return;
-      }
-      const userStore = useUserStore();
+      }      const userStore = useUserStore();
       try {
-        const response = await axios.post("http://localhost:8088/users", {
-          full_name: this.signUpName,
-          email: this.signUpEmail,
-          password: this.signUpPassword,
-          date_of_birth: this.signUpDateOfBirth,
-          phone_number: this.signUpPhoneNumber,
+        // Create form data as per API documentation
+        const formData = new URLSearchParams();
+        formData.append('full_name', this.signUpName);
+        formData.append('email', this.signUpEmail);
+        formData.append('password', this.signUpPassword);
+        formData.append('date_of_birth', this.signUpDateOfBirth);
+        formData.append('phone_number', this.signUpPhoneNumber);
+
+        const response = await axios.post("http://localhost:8088/api/users", formData, {
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded'
+          }
         });
         console.log("Sign up successful:", response.data);
-        const userId = response.data.user_id;
-        const userEmail = response.data.email;
-        const userRole = response.data.role;
-        userStore.setUser(userId, userEmail, userRole);
-        alert("Sign up successfully");
-        router.push({ path: "/" });
+        
+        if (response.data.success) {
+          const userId = response.data.data.user_id;
+          const userEmail = response.data.data.email;
+          const userRole = 'user'; // Default role
+          userStore.setUser(userId, userEmail, userRole);
+          alert("Sign up successfully");
+          router.push({ path: "/" });
+        } else {
+          alert("Sign up failed: " + response.data.error);
+        }
       } catch (error) {
         console.error("Sign up error:", error);
         alert(
-          "Sign up fail, please try again. Error: " + error.response.data.error
+          "Sign up fail, please try again. Error: " + (error.response?.data?.error || error.message)
         );
       }
-    },
-    async signIn() {
+    },    async signIn() {
       const userStore = useUserStore();
       try {
-        const response = await axios.post("http://localhost:8088/users/login", {
-          email: this.signInEmail,
-          password: this.signInPassword,
+        // Create form data as per API documentation
+        const formData = new URLSearchParams();
+        formData.append('email', this.signInEmail);
+        formData.append('password', this.signInPassword);
+
+        const response = await axios.post("http://localhost:8088/api/users/login", formData, {
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded'
+          }
         });
         console.log("Sign in successful:", response.data);
-        const userId = response.data.user_id;
-        const userEmail = response.data.email;
-        const userRole = response.data.role;
-        userStore.setUser(userId, userEmail, userRole);
-        if (userRole == "admin") {
-          router.push({ path: "/admin-user" });
-        } else if (userRole == "user") {
-          router.push({ path: "/" });
+        
+        if (response.data.success) {
+          const userId = response.data.data.user_id;
+          const userEmail = response.data.data.email;
+          const userRole = response.data.data.role;
+          userStore.setUser(userId, userEmail, userRole);
+          if (userRole == "admin") {
+            router.push({ path: "/admin-user" });
+          } else if (userRole == "user") {
+            router.push({ path: "/" });
+          }
+        } else {
+          alert("Sign in failed: " + response.data.error);
         }
       } catch (error) {
         console.error("Sign in error:", error);
         alert(
           "Sign in fail, please try again. Error: " +
-            error.response.data.message
+            (error.response?.data?.error || error.message)
         );
       }
     },

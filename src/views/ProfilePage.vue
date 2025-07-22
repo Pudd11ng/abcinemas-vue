@@ -54,17 +54,17 @@ export default {
     const email = ref("");
     const dateOfBirth = ref("");
     const phoneNumber = ref("");
-    const isValid = ref(true);
-
-    const getUserData = async () => {
+    const isValid = ref(true);    const getUserData = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:8088/users/${userId.value}`
+          `http://localhost:8088/api/users/${userId.value}`
         );
-        name.value = response.data.full_name;
-        email.value = response.data.email;
-        dateOfBirth.value = response.data.date_of_birth;
-        phoneNumber.value = response.data.phone_number;
+        if (response.data.success) {
+          name.value = response.data.data.full_name;
+          email.value = response.data.data.email;
+          dateOfBirth.value = response.data.data.date_of_birth;
+          phoneNumber.value = response.data.data.phone_number;
+        }
       } catch (error) {
         console.error("Error fetching user data:", error);
       }
@@ -98,24 +98,33 @@ export default {
       name.value = name.value.trim();
       email.value = email.value.trim();
       dateOfBirth.value = dateOfBirth.value.trim();
-      phoneNumber.value = phoneNumber.value.trim();
+      phoneNumber.value = phoneNumber.value.trim();      try {
+        // Create form data as per API documentation
+        const formData = new URLSearchParams();
+        formData.append('full_name', name.value);
+        formData.append('email', email.value);
+        formData.append('date_of_birth', dateOfBirth.value);
+        formData.append('phone_number', phoneNumber.value);
 
-      try {
         const response = await axios.put(
-          `http://localhost:8088/users/${userId.value}`,
+          `http://localhost:8088/api/users/${userId.value}`,
+          formData,
           {
-            full_name: name.value,
-            email: email.value,
-            date_of_birth: dateOfBirth.value,
-            phone_number: phoneNumber.value,
+            headers: {
+              'Content-Type': 'application/x-www-form-urlencoded'
+            }
           }
         );
         console.log("Profile updated successfully:", response.data);
-        alert("Profile updated successfully");
-        router.push({ path: "/profile" });
+        if (response.data.success) {
+          alert("Profile updated successfully");
+          router.push({ path: "/profile" });
+        } else {
+          alert("Update failed: " + response.data.error);
+        }
       } catch (error) {
         console.error("Error updating user data:", error);
-        alert("User profile update fail. Error: " + error.response.data.error);
+        alert("User profile update fail. Error: " + (error.response?.data?.error || error.message));
       }
     };
 

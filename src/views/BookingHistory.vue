@@ -75,15 +75,17 @@ export default {
         return acc;
       }, {});
       return Object.values(groupedBookings);
-    };
-
-    const fetchBookingHistory = async (userId) => {
+    };    const fetchBookingHistory = async (userId) => {
       loading.value = true;
       try {
         const response = await axios.get(
-          `http://localhost:8088/users/bookings/${userId}`
+          `http://localhost:8088/api/bookings?user_id=${userId}`
         );
-        bookings.value = groupSeatsByBookingId(response.data.bookingDetails);
+        if (response.data.bookings) {
+          bookings.value = groupSeatsByBookingId(response.data.bookings);
+        } else {
+          bookings.value = [];
+        }
         error.value = "";
       } catch (error) {
         console.error("Error fetching booking history:", error);

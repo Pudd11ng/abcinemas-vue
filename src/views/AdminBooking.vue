@@ -138,7 +138,7 @@
         if (this.searchTerm) params.append("search", this.searchTerm);
   
         axios
-          .get(`http://localhost:8088/bookings`, { params })
+          .get(`http://localhost:8088/api/bookings`, { params })
           .then((response) => {
             this.bookings = response.data.bookings.map(booking => ({
               ...booking,
@@ -166,7 +166,7 @@
       },
       deleteBooking(bookingId) {
         axios
-          .delete(`http://localhost:8088/bookings/${bookingId}`)
+          .delete(`http://localhost:8088/api/bookings/${bookingId}`)
           .then((response) => {
             this.fetchBookings();
             alert("Booking deleted successfully.");
@@ -196,7 +196,7 @@
         });
   
         axios
-          .put(`http://localhost:8088/bookings/${this.selectedBooking.booking_id}`, { seats: updatedSeats })
+          .put(`http://localhost:8088/api/bookings/${this.selectedBooking.booking_id}`, { seats: updatedSeats })
           .then((response) => {
             this.fetchBookings();
             this.closeUpdateModal();

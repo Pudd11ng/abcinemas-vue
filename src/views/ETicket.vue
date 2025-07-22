@@ -72,7 +72,7 @@ export default {
   },
   methods: {
     fetchBookingDetails(bookingId) {
-      fetch(`http://localhost:8088/bookings/${bookingId}`)
+      fetch(`http://localhost:8088/api/bookings/${bookingId}`)
         .then(response => response.json())
         .then(data => {
           this.tickets = data.bookingDetails.map(detail => ({
